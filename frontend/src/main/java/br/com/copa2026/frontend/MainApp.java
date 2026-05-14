@@ -1,5 +1,6 @@
 package br.com.copa2026.frontend;
 
+import br.com.copa2026.frontend.dto.AlbumDTO;
 import br.com.copa2026.frontend.dto.DashboardDTO;
 import br.com.copa2026.frontend.dto.FaltantesDTO;
 import br.com.copa2026.frontend.dto.FigurinhaDTO;
@@ -16,6 +17,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
@@ -58,11 +60,23 @@ public class MainApp extends Application {
 
     private Label lblCardPercentual;
 
+    private ComboBox<AlbumDTO> comboAlbuns;
+
+    private Long albumIdSelecionado;
+
     @Override
     public void start(Stage stage) {
 
+        List<AlbumDTO> albuns =
+                service.carregarAlbuns();
+
+        albumIdSelecionado =
+                albuns.get(0).getId();
+
         DashboardDTO dto =
-                service.carregarDashboard();
+                service.carregarDashboard(
+                        albumIdSelecionado
+                );
 
         List<SelecaoDTO> selecoes =
                 service.carregarSelecoes();
@@ -118,6 +132,32 @@ public class MainApp extends Application {
                 "-fx-font-size: 28px;"
                         + "-fx-font-weight: bold;"
         );
+
+        comboAlbuns =
+                new ComboBox<>();
+
+        comboAlbuns.getItems()
+                .addAll(albuns);
+
+        if (!albuns.isEmpty()) {
+
+            comboAlbuns.getSelectionModel()
+                    .selectFirst();
+        }
+
+        comboAlbuns.setOnAction(event -> {
+
+            AlbumDTO album =
+                    comboAlbuns.getValue();
+
+            if (album != null) {
+
+                albumIdSelecionado =
+                        album.getId();
+
+                atualizarDashboard();
+            }
+        });
 
         HBox cards =
                 new HBox();
@@ -244,6 +284,7 @@ public class MainApp extends Application {
 
         centro.getChildren().addAll(
                 titulo,
+                comboAlbuns,
                 cards,
                 btnExportar,
                 painelSelecao,
@@ -310,7 +351,10 @@ public class MainApp extends Application {
     ) {
 
         SelecaoDashboardDTO dto =
-                service.carregarSelecao(sigla);
+                service.carregarSelecao(
+                        albumIdSelecionado,
+                        sigla
+                );
 
         atualizarPainelSelecao(dto);
 
@@ -336,6 +380,7 @@ public class MainApp extends Application {
             btn.setOnAction(event -> {
 
                 service.alternarFigurinha(
+                        albumIdSelecionado,
                         figurinha.getId()
                 );
 
@@ -400,7 +445,9 @@ public class MainApp extends Application {
     private void atualizarDashboard() {
 
         DashboardDTO dto =
-                service.carregarDashboard();
+                service.carregarDashboard(
+                        albumIdSelecionado
+                );
 
         lblCardPossui.setText(
                 dto.getPossui().toString()
@@ -500,7 +547,9 @@ public class MainApp extends Application {
     private void exportarFaltantes() {
 
         List<FaltantesDTO> lista =
-                service.carregarFaltantes();
+                service.carregarFaltantes(
+                        albumIdSelecionado
+                );
 
         StringBuilder texto =
                 new StringBuilder();

@@ -1,5 +1,6 @@
 package br.com.copa2026.frontend.service;
 
+import br.com.copa2026.frontend.dto.AlbumDTO;
 import br.com.copa2026.frontend.dto.DashboardDTO;
 import br.com.copa2026.frontend.dto.FaltantesDTO;
 import br.com.copa2026.frontend.dto.SelecaoDTO;
@@ -21,12 +22,15 @@ public class DashboardService {
     private final ObjectMapper mapper =
             new ObjectMapper();
 
-    public DashboardDTO carregarDashboard() {
+    public DashboardDTO carregarDashboard(
+            Long albumId
+    ) {
 
         try {
 
             URI uri = URI.create(
-                    "http://localhost:8080/dashboard"
+                    "http://localhost:8080/dashboard?albumId="
+                            + albumId
             );
 
             URL url = uri.toURL();
@@ -87,6 +91,7 @@ public class DashboardService {
     }
 
     public SelecaoDashboardDTO carregarSelecao(
+            Long albumId,
             String sigla
     ) {
 
@@ -95,6 +100,8 @@ public class DashboardService {
             URI uri = URI.create(
                     "http://localhost:8080/selecao/"
                             + sigla
+                            + "?albumId="
+                            + albumId
             );
 
             URL url = uri.toURL();
@@ -122,6 +129,7 @@ public class DashboardService {
     }
 
     public void alternarFigurinha(
+            Long albumId,
             Long figurinhaId
     ) {
 
@@ -130,6 +138,8 @@ public class DashboardService {
             URI uri = URI.create(
                     "http://localhost:8080/album/"
                             + figurinhaId
+                            + "?albumId="
+                            + albumId
             );
 
             URL url = uri.toURL();
@@ -148,12 +158,48 @@ public class DashboardService {
         }
     }
 
-    public List<FaltantesDTO> carregarFaltantes() {
+    public List<FaltantesDTO> carregarFaltantes(
+            Long albumId
+    ) {
 
         try {
 
             URI uri = URI.create(
-                    "http://localhost:8080/faltantes"
+                    "http://localhost:8080/faltantes?albumId="
+                            + albumId
+            );
+
+            URL url = uri.toURL();
+
+            HttpURLConnection conexao =
+                    (HttpURLConnection)
+                            url.openConnection();
+
+            conexao.setRequestMethod("GET");
+
+            InputStream input =
+                    conexao.getInputStream();
+
+            return mapper.readValue(
+                    input,
+                    new TypeReference<>() {
+                    }
+            );
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+
+            return List.of();
+        }
+    }
+
+    public List<AlbumDTO> carregarAlbuns() {
+
+        try {
+
+            URI uri = URI.create(
+                    "http://localhost:8080/albuns"
             );
 
             URL url = uri.toURL();
