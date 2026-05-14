@@ -1,6 +1,7 @@
 package br.com.copa2026.frontend.service;
 
 import br.com.copa2026.frontend.dto.AlbumDTO;
+import br.com.copa2026.frontend.dto.CreateAlbumDTO;
 import br.com.copa2026.frontend.dto.DashboardDTO;
 import br.com.copa2026.frontend.dto.FaltantesDTO;
 import br.com.copa2026.frontend.dto.SelecaoDTO;
@@ -8,8 +9,10 @@ import br.com.copa2026.frontend.dto.SelecaoDashboardDTO;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
 
 import java.io.InputStream;
+import java.io.OutputStream;
 
 import java.net.HttpURLConnection;
 import java.net.URI;
@@ -224,6 +227,86 @@ public class DashboardService {
             e.printStackTrace();
 
             return List.of();
+        }
+    }
+
+    public void criarAlbum(
+            String nome
+    ) {
+
+        try {
+
+            URI uri = URI.create(
+                    "http://localhost:8080/albuns"
+            );
+
+            URL url = uri.toURL();
+
+            HttpURLConnection conexao =
+                    (HttpURLConnection)
+                            url.openConnection();
+
+            conexao.setRequestMethod("POST");
+
+            conexao.setDoOutput(true);
+
+            conexao.setRequestProperty(
+                    "Content-Type",
+                    "application/json"
+            );
+
+            CreateAlbumDTO dto =
+                    new CreateAlbumDTO();
+
+            dto.setNome(nome);
+
+            ObjectWriter writer =
+                    mapper.writer();
+
+            String json =
+                    writer.writeValueAsString(dto);
+
+            OutputStream os =
+                    conexao.getOutputStream();
+
+            os.write(json.getBytes());
+
+            os.flush();
+
+            os.close();
+
+            conexao.getResponseCode();
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+        }
+    }
+
+    public void excluirAlbum(
+            Long albumId
+    ) {
+
+        try {
+
+            URI uri = URI.create(
+                    "http://localhost:8080/albuns/"
+                            + albumId
+            );
+
+            URL url = uri.toURL();
+
+            HttpURLConnection conexao =
+                    (HttpURLConnection)
+                            url.openConnection();
+
+            conexao.setRequestMethod("DELETE");
+
+            conexao.getResponseCode();
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
         }
     }
 }
