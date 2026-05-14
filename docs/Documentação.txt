@@ -1,0 +1,29 @@
+--Criando Springboot
+https://start.spring.io/
+
+Project: Maven
+Language: Java
+Springboot: 3.5.14
+
+Project Metadata
+Group: br.com.copa2026
+Artifact: backend
+Package name: br.com.copa2026.backend
+Packaging: JAR
+Java: 21
+
+----
+--Extensões obrigatórias no VsCode
+Extension Pack for Java
+Spring Boot Extension Pack
+Maven for Java
+
+--Rodar o projeto
+cd C:\Users\T-GAMER\Desktop\Dev\Copa2026\backend ou
+cd backend
+(old) mvn spring-boot:run
+.\mvnw.cmd spring-boot:run
+
+cd C:\Users\T-GAMER\Desktop\Dev\Copa2026\frontend ou
+cd frontend
+..\backend\mvnw.cmd javafx:run

@@ -1,0 +1,32 @@
+# Maven
+target/
+
+# IntelliJ
+.idea/
+
+# VSCode
+.vscode/
+
+# Logs
+*.log
+
+# Java
+*.class
+
+# Windows
+Thumbs.db
+Desktop.ini
+
+# Database
+*.mv.db
+*.trace.db
+
+# JavaFX
+bin/
+
+# Build
+dist/
+
+# PostgreSQL backups
+*.backup
+*.sql.bak
