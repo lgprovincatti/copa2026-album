@@ -16,11 +16,14 @@ import javafx.geometry.Pos;
 
 import javafx.scene.Scene;
 
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.TextInputDialog;
 
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
@@ -36,6 +39,7 @@ import java.io.File;
 import java.io.FileWriter;
 
 import java.util.List;
+import java.util.Optional;
 
 public class MainApp extends Application {
 
@@ -164,6 +168,130 @@ public class MainApp extends Application {
 
         cards.setSpacing(20);
 
+        HBox acoesAlbum =
+                new HBox();
+
+        acoesAlbum.setSpacing(10);
+
+        Button btnNovoAlbum =
+                new Button(
+                        "NOVO ÁLBUM"
+                );
+
+        btnNovoAlbum.setStyle(
+                "-fx-background-color: #2E7D32;"
+                        + "-fx-text-fill: white;"
+                        + "-fx-font-weight: bold;"
+        );
+
+        Button btnExcluirAlbum =
+                new Button(
+                        "EXCLUIR ÁLBUM"
+                );
+
+        btnExcluirAlbum.setStyle(
+                "-fx-background-color: #C62828;"
+                        + "-fx-text-fill: white;"
+                        + "-fx-font-weight: bold;"
+        );
+
+        acoesAlbum.getChildren().addAll(
+                btnNovoAlbum,
+                btnExcluirAlbum
+        );
+
+        btnNovoAlbum.setOnAction(event -> {
+
+            TextInputDialog dialog =
+                    new TextInputDialog();
+
+            dialog.setTitle(
+                    "Novo Álbum"
+            );
+
+            dialog.setHeaderText(
+                    "Criar novo álbum"
+            );
+
+            dialog.setContentText(
+                    "Nome:"
+            );
+
+            Optional<String> resultado =
+                    dialog.showAndWait();
+
+            resultado.ifPresent(nome -> {
+
+                service.criarAlbum(nome);
+
+                atualizarAlbuns();
+            });
+        });
+
+        btnExcluirAlbum.setOnAction(event -> {
+
+            AlbumDTO album =
+                    comboAlbuns.getValue();
+
+            if (album == null) {
+                return;
+            }
+
+            if (comboAlbuns.getItems().size() <= 1) {
+
+                Alert alerta =
+                        new Alert(
+                                Alert.AlertType.WARNING
+                        );
+
+                alerta.setTitle(
+                        "Operação não permitida"
+                );
+
+                alerta.setHeaderText(
+                        "Último álbum"
+                );
+
+                alerta.setContentText(
+                        "Não é possível excluir o último álbum."
+                );
+
+                alerta.showAndWait();
+
+                return;
+            }
+
+            Alert alert =
+                    new Alert(
+                            Alert.AlertType.CONFIRMATION
+                    );
+
+            alert.setTitle(
+                    "Excluir álbum"
+            );
+
+            alert.setHeaderText(
+                    "Confirma exclusão?"
+            );
+
+            alert.setContentText(
+                    album.getNome()
+            );
+
+            Optional<ButtonType> resultado =
+                    alert.showAndWait();
+
+            if (resultado.isPresent()
+                    && resultado.get() == ButtonType.OK) {
+
+                service.excluirAlbum(
+                        album.getId()
+                );
+
+                atualizarAlbuns();
+            }
+        });
+
         Button btnExportar =
                 new Button(
                         "EXPORTAR FALTANTES"
@@ -285,6 +413,7 @@ public class MainApp extends Application {
         centro.getChildren().addAll(
                 titulo,
                 comboAlbuns,
+                acoesAlbum,
                 cards,
                 btnExportar,
                 painelSelecao,
@@ -401,8 +530,6 @@ public class MainApp extends Application {
                 );
 
                 carregarSelecao(sigla);
-
-                atualizarDashboard();
             });
 
             gridFigurinhas.getChildren()
@@ -463,6 +590,48 @@ public class MainApp extends Application {
                         dto.getPercentual()
                 )
         );
+
+        limparSelecao();
+    }
+
+    private void limparSelecao() {
+
+        lblNomeSelecao.setText(
+                "Selecione uma seleção"
+        );
+
+        lblTotalSelecao.setText("");
+
+        lblPossuiSelecao.setText("");
+
+        lblFaltamSelecao.setText("");
+
+        lblPercentualSelecao.setText("");
+
+        gridFigurinhas.getChildren().clear();
+    }
+
+    private void atualizarAlbuns() {
+
+        List<AlbumDTO> albuns =
+                service.carregarAlbuns();
+
+        comboAlbuns.getItems().clear();
+
+        comboAlbuns.getItems()
+                .addAll(albuns);
+
+        if (!albuns.isEmpty()) {
+
+            comboAlbuns.getSelectionModel()
+                    .selectLast();
+
+            albumIdSelecionado =
+                    comboAlbuns.getValue()
+                            .getId();
+
+            atualizarDashboard();
+        }
     }
 
     private void atualizarCorBotao(

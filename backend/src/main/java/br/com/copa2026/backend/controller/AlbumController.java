@@ -1,11 +1,11 @@
 package br.com.copa2026.backend.controller;
 
 import br.com.copa2026.backend.dto.AlbumDTO;
+import br.com.copa2026.backend.dto.CreateAlbumDTO;
 
 import br.com.copa2026.backend.service.AlbumService;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -24,5 +24,21 @@ public class AlbumController {
     public List<AlbumDTO> listar() {
 
         return service.listar();
+    }
+
+    @PostMapping("/albuns")
+    public void criar(
+            @RequestBody CreateAlbumDTO dto
+    ) {
+
+        service.criar(dto);
+    }
+
+    @DeleteMapping("/albuns/{id}")
+    public void excluir(
+            @PathVariable Long id
+    ) {
+
+        service.excluir(id);
     }
 }
