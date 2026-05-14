@@ -5,9 +5,9 @@ import br.com.copa2026.backend.dto.FaltantesDTO;
 import br.com.copa2026.backend.dto.FigurinhaDTO;
 import br.com.copa2026.backend.dto.SelecaoDashboardDTO;
 
-import br.com.copa2026.backend.entity.Album;
+import br.com.copa2026.backend.entity.AlbumFigurinha;
 
-import br.com.copa2026.backend.repository.AlbumRepository;
+import br.com.copa2026.backend.repository.AlbumFigurinhaRepository;
 
 import org.springframework.stereotype.Service;
 
@@ -21,24 +21,31 @@ import java.util.stream.Collectors;
 @Service
 public class DashboardService {
 
-    private final AlbumRepository repository;
+    private final AlbumFigurinhaRepository repository;
 
     public DashboardService(
-            AlbumRepository repository
+            AlbumFigurinhaRepository repository
     ) {
         this.repository = repository;
     }
 
-    public DashboardDTO obterDashboard() {
+    public DashboardDTO obterDashboard(
+            Long albumId
+    ) {
 
         Long total =
-                repository.total();
+                repository.countByAlbumId(
+                        albumId
+                );
 
         Long possui =
-                repository.possui();
+                repository.countByAlbumIdAndPossui(
+                        albumId,
+                        "S"
+                );
 
         Long faltam =
-                repository.faltam();
+                total - possui;
 
         Double percentual = 0.0;
 
@@ -58,12 +65,14 @@ public class DashboardService {
     }
 
     public void marcarComoPossui(
+            Long albumId,
             Long figurinhaId
     ) {
 
-        Album album =
+        AlbumFigurinha album =
                 repository
-                        .findByFigurinhaId(
+                        .findByAlbumIdAndFigurinhaId(
+                                albumId,
                                 figurinhaId
                         )
                         .orElseThrow();
@@ -87,12 +96,14 @@ public class DashboardService {
     }
 
     public SelecaoDashboardDTO obterSelecao(
+            Long albumId,
             String sigla
     ) {
 
-        List<Album> albuns =
+        List<AlbumFigurinha> albuns =
                 repository
-                        .findByFigurinhaSelecaoSiglaOrderByFigurinhaNumero(
+                        .findByAlbumIdAndFigurinhaSelecaoSiglaOrderByFigurinhaNumero(
+                                albumId,
                                 sigla
                         );
 
@@ -161,14 +172,22 @@ public class DashboardService {
         return dto;
     }
 
-    public List<FaltantesDTO> obterFaltantes() {
+    public List<FaltantesDTO> obterFaltantes(
+            Long albumId
+    ) {
 
-        List<Album> albuns =
+        List<AlbumFigurinha> albuns =
                 repository.findAll();
 
-        Map<String, List<Album>> agrupado =
+        Map<String, List<AlbumFigurinha>> agrupado =
 
                 albuns.stream()
+
+                        .filter(a ->
+                                a.getAlbum()
+                                        .getId()
+                                        .equals(albumId)
+                        )
 
                         .filter(a ->
                                 "N".equals(
