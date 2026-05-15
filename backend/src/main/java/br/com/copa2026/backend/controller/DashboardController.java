@@ -1,6 +1,7 @@
 package br.com.copa2026.backend.controller;
 
 import br.com.copa2026.backend.dto.DashboardDTO;
+import br.com.copa2026.backend.dto.DashboardGrupoDTO;
 import br.com.copa2026.backend.dto.FaltantesDTO;
 import br.com.copa2026.backend.dto.SelecaoDashboardDTO;
 
@@ -26,7 +27,7 @@ public class DashboardController {
     }
 
     @GetMapping("/dashboard")
-    public DashboardDTO dashboard(
+    public DashboardDTO obterDashboard(
             @RequestParam Long albumId
     ) {
 
@@ -35,24 +36,12 @@ public class DashboardController {
         );
     }
 
-    @GetMapping("/selecao/{sigla}")
-    public SelecaoDashboardDTO selecao(
-            @PathVariable String sigla,
+    @GetMapping("/dashboard/grupos")
+    public List<DashboardGrupoDTO> obterGrupos(
             @RequestParam Long albumId
     ) {
 
-        return service.obterSelecao(
-                albumId,
-                sigla
-        );
-    }
-
-    @GetMapping("/faltantes")
-    public List<FaltantesDTO> faltantes(
-            @RequestParam Long albumId
-    ) {
-
-        return service.obterFaltantes(
+        return service.obterGrupos(
                 albumId
         );
     }
@@ -66,6 +55,28 @@ public class DashboardController {
         service.marcarComoPossui(
                 albumId,
                 figurinhaId
+        );
+    }
+
+    @GetMapping("/selecao/{sigla}")
+    public SelecaoDashboardDTO obterSelecao(
+            @PathVariable String sigla,
+            @RequestParam Long albumId
+    ) {
+
+        return service.obterSelecao(
+                albumId,
+                sigla
+        );
+    }
+
+    @GetMapping("/faltantes")
+    public List<FaltantesDTO> obterFaltantes(
+            @RequestParam Long albumId
+    ) {
+
+        return service.obterFaltantes(
+                albumId
         );
     }
 }

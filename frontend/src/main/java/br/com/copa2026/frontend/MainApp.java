@@ -530,6 +530,26 @@ public class MainApp extends Application {
                 );
 
                 carregarSelecao(sigla);
+
+                DashboardDTO dashboard =
+                        service.carregarDashboard(
+                                albumIdSelecionado
+                        );
+
+                lblCardPossui.setText(
+                        dashboard.getPossui().toString()
+                );
+
+                lblCardFaltam.setText(
+                        dashboard.getFaltam().toString()
+                );
+
+                lblCardPercentual.setText(
+                        String.format(
+                                "%.2f%%",
+                                dashboard.getPercentual()
+                        )
+                );
             });
 
             gridFigurinhas.getChildren()
