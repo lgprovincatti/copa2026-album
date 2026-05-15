@@ -349,6 +349,93 @@ public class MainApp extends Application {
             alert.showAndWait();
         });
 
+        Button btnRestore =
+                new Button(
+                        "RESTORE"
+                );
+
+        btnRestore.setStyle(
+                "-fx-background-color: #EF6C00;"
+                        + "-fx-text-fill: white;"
+                        + "-fx-font-weight: bold;"
+                        + "-fx-font-size: 14px;"
+        );
+
+        btnRestore.setOnAction(event -> {
+
+            FileChooser chooser =
+                    new FileChooser();
+
+            chooser.setTitle(
+                    "Selecionar backup"
+            );
+
+            chooser.getExtensionFilters()
+                    .add(
+
+                            new FileChooser.ExtensionFilter(
+                                    "Arquivo SQL",
+                                    "*.sql"
+                            )
+                    );
+
+            File arquivo =
+                    chooser.showOpenDialog(
+                            null
+                    );
+
+            if (arquivo != null) {
+
+                boolean sucesso =
+                        backupService.restaurarBackup(
+                                arquivo
+                        );
+
+                Alert alert;
+
+                if (sucesso) {
+
+                    alert =
+                            new Alert(
+                                    Alert.AlertType.INFORMATION
+                            );
+
+                    alert.setTitle(
+                            "Restore"
+                    );
+
+                    alert.setHeaderText(
+                            "Restore realizado"
+                    );
+
+                    alert.setContentText(
+                            "Banco restaurado com sucesso."
+                    );
+
+                } else {
+
+                    alert =
+                            new Alert(
+                                    Alert.AlertType.ERROR
+                            );
+
+                    alert.setTitle(
+                            "Restore"
+                    );
+
+                    alert.setHeaderText(
+                            "Erro no restore"
+                    );
+
+                    alert.setContentText(
+                            "Falha ao restaurar backup."
+                    );
+                }
+
+                alert.showAndWait();
+            }
+        });
+
         VBox cardTotal =
                 criarCard(
                         "TOTAL",
@@ -457,6 +544,7 @@ public class MainApp extends Application {
                 cards,
                 btnExportar,
                 btnBackup,
+                btnRestore,
                 painelSelecao,
                 gridFigurinhas
         );
