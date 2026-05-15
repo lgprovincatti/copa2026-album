@@ -1,0 +1,4509 @@
+--
+-- PostgreSQL database dump
+--
+
+\restrict PfPbEiiPt2s4rnwknrXcw9c5lw10uUGT044RA2iZ5fJXjdepPhrtrIyAE4A53Wd
+
+-- Dumped from database version 18.3
+-- Dumped by pg_dump version 18.3
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET transaction_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+SET default_tablespace = '';
+
+SET default_table_access_method = heap;
+
+--
+-- Name: album; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.album (
+    figurinha_id bigint NOT NULL,
+    possui character(1) DEFAULT 'N'::bpchar,
+    repetidas integer DEFAULT 0,
+    data_atualizacao timestamp without time zone
+);
+
+
+ALTER TABLE public.album OWNER TO postgres;
+
+--
+-- Name: album_figurinha; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.album_figurinha (
+    id bigint CONSTRAINT album_figurinha_id_not_null1 NOT NULL,
+    album_id bigint NOT NULL,
+    figurinha_id bigint NOT NULL,
+    possui character(1) DEFAULT 'N'::bpchar,
+    data_atualizacao timestamp without time zone
+);
+
+
+ALTER TABLE public.album_figurinha OWNER TO postgres;
+
+--
+-- Name: album_figurinha_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.album_figurinha_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.album_figurinha_id_seq OWNER TO postgres;
+
+--
+-- Name: album_figurinha_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.album_figurinha_id_seq OWNED BY public.album_figurinha.id;
+
+
+--
+-- Name: album_novo; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.album_novo (
+    id bigint NOT NULL,
+    nome character varying(100) NOT NULL,
+    data_criacao timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
+    ativo character(1) DEFAULT 'S'::bpchar
+);
+
+
+ALTER TABLE public.album_novo OWNER TO postgres;
+
+--
+-- Name: album_novo_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.album_novo_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.album_novo_id_seq OWNER TO postgres;
+
+--
+-- Name: album_novo_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.album_novo_id_seq OWNED BY public.album_novo.id;
+
+
+--
+-- Name: categoria_figurinha; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.categoria_figurinha (
+    id bigint NOT NULL,
+    nome character varying(50) NOT NULL
+);
+
+
+ALTER TABLE public.categoria_figurinha OWNER TO postgres;
+
+--
+-- Name: categoria_figurinha_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.categoria_figurinha_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.categoria_figurinha_id_seq OWNER TO postgres;
+
+--
+-- Name: categoria_figurinha_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.categoria_figurinha_id_seq OWNED BY public.categoria_figurinha.id;
+
+
+--
+-- Name: figurinha; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.figurinha (
+    id bigint NOT NULL,
+    codigo character varying(20) NOT NULL,
+    numero integer,
+    descricao character varying(200),
+    categoria_id bigint NOT NULL,
+    selecao_id bigint,
+    rara character(1) DEFAULT 'N'::bpchar,
+    observacao character varying(300),
+    tipo character varying(30)
+);
+
+
+ALTER TABLE public.figurinha OWNER TO postgres;
+
+--
+-- Name: figurinha_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.figurinha_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.figurinha_id_seq OWNER TO postgres;
+
+--
+-- Name: figurinha_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.figurinha_id_seq OWNED BY public.figurinha.id;
+
+
+--
+-- Name: selecao; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.selecao (
+    id bigint NOT NULL,
+    nome character varying(100) NOT NULL,
+    sigla character varying(10) NOT NULL,
+    grupo_copa character varying(5),
+    ativa character(1) DEFAULT 'S'::bpchar
+);
+
+
+ALTER TABLE public.selecao OWNER TO postgres;
+
+--
+-- Name: selecao_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.selecao_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.selecao_id_seq OWNER TO postgres;
+
+--
+-- Name: selecao_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.selecao_id_seq OWNED BY public.selecao.id;
+
+
+--
+-- Name: album_figurinha id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.album_figurinha ALTER COLUMN id SET DEFAULT nextval('public.album_figurinha_id_seq'::regclass);
+
+
+--
+-- Name: album_novo id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.album_novo ALTER COLUMN id SET DEFAULT nextval('public.album_novo_id_seq'::regclass);
+
+
+--
+-- Name: categoria_figurinha id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.categoria_figurinha ALTER COLUMN id SET DEFAULT nextval('public.categoria_figurinha_id_seq'::regclass);
+
+
+--
+-- Name: figurinha id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.figurinha ALTER COLUMN id SET DEFAULT nextval('public.figurinha_id_seq'::regclass);
+
+
+--
+-- Name: selecao id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.selecao ALTER COLUMN id SET DEFAULT nextval('public.selecao_id_seq'::regclass);
+
+
+--
+-- Data for Name: album; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.album (figurinha_id, possui, repetidas, data_atualizacao) FROM stdin;
+2	N	0	\N
+3	N	0	\N
+4	N	0	\N
+5	N	0	\N
+6	N	0	\N
+7	N	0	\N
+8	N	0	\N
+9	N	0	\N
+10	N	0	\N
+11	N	0	\N
+12	N	0	\N
+13	N	0	\N
+14	N	0	\N
+15	N	0	\N
+16	N	0	\N
+17	N	0	\N
+18	N	0	\N
+19	N	0	\N
+20	N	0	\N
+21	N	0	\N
+22	N	0	\N
+23	N	0	\N
+24	N	0	\N
+25	N	0	\N
+26	N	0	\N
+27	N	0	\N
+28	N	0	\N
+29	N	0	\N
+30	N	0	\N
+31	N	0	\N
+32	N	0	\N
+33	N	0	\N
+34	N	0	\N
+35	N	0	\N
+36	N	0	\N
+37	N	0	\N
+38	N	0	\N
+39	N	0	\N
+40	N	0	\N
+41	N	0	\N
+42	N	0	\N
+43	N	0	\N
+44	N	0	\N
+45	N	0	\N
+46	N	0	\N
+47	N	0	\N
+48	N	0	\N
+49	N	0	\N
+50	N	0	\N
+51	N	0	\N
+52	N	0	\N
+53	N	0	\N
+54	N	0	\N
+55	N	0	\N
+56	N	0	\N
+57	N	0	\N
+58	N	0	\N
+59	N	0	\N
+60	N	0	\N
+61	N	0	\N
+62	N	0	\N
+63	N	0	\N
+64	N	0	\N
+65	N	0	\N
+66	N	0	\N
+67	N	0	\N
+68	N	0	\N
+69	N	0	\N
+70	N	0	\N
+71	N	0	\N
+72	N	0	\N
+73	N	0	\N
+74	N	0	\N
+75	N	0	\N
+76	N	0	\N
+77	N	0	\N
+78	N	0	\N
+79	N	0	\N
+80	N	0	\N
+81	N	0	\N
+82	N	0	\N
+83	N	0	\N
+84	N	0	\N
+85	N	0	\N
+86	N	0	\N
+87	N	0	\N
+88	N	0	\N
+89	N	0	\N
+90	N	0	\N
+91	N	0	\N
+92	N	0	\N
+93	N	0	\N
+94	N	0	\N
+95	N	0	\N
+96	N	0	\N
+97	N	0	\N
+98	N	0	\N
+99	N	0	\N
+100	N	0	\N
+101	N	0	\N
+102	N	0	\N
+103	N	0	\N
+104	N	0	\N
+105	N	0	\N
+106	N	0	\N
+107	N	0	\N
+108	N	0	\N
+109	N	0	\N
+110	N	0	\N
+111	N	0	\N
+112	N	0	\N
+113	N	0	\N
+114	N	0	\N
+115	N	0	\N
+116	N	0	\N
+117	N	0	\N
+118	N	0	\N
+119	N	0	\N
+120	N	0	\N
+121	N	0	\N
+122	N	0	\N
+123	N	0	\N
+124	N	0	\N
+125	N	0	\N
+126	N	0	\N
+127	N	0	\N
+128	N	0	\N
+129	N	0	\N
+130	N	0	\N
+131	N	0	\N
+132	N	0	\N
+133	N	0	\N
+134	N	0	\N
+135	N	0	\N
+136	N	0	\N
+137	N	0	\N
+138	N	0	\N
+139	N	0	\N
+140	N	0	\N
+141	N	0	\N
+142	N	0	\N
+143	N	0	\N
+144	N	0	\N
+145	N	0	\N
+146	N	0	\N
+147	N	0	\N
+148	N	0	\N
+149	N	0	\N
+150	N	0	\N
+151	N	0	\N
+152	N	0	\N
+153	N	0	\N
+154	N	0	\N
+155	N	0	\N
+156	N	0	\N
+157	N	0	\N
+158	N	0	\N
+159	N	0	\N
+160	N	0	\N
+161	N	0	\N
+162	N	0	\N
+163	N	0	\N
+164	N	0	\N
+165	N	0	\N
+166	N	0	\N
+167	N	0	\N
+168	N	0	\N
+169	N	0	\N
+170	N	0	\N
+171	N	0	\N
+173	N	0	\N
+174	N	0	\N
+175	N	0	\N
+176	N	0	\N
+177	N	0	\N
+178	N	0	\N
+179	N	0	\N
+180	N	0	\N
+181	N	0	\N
+182	N	0	\N
+183	N	0	\N
+184	N	0	\N
+185	N	0	\N
+172	N	0	2026-05-14 09:54:45.883202
+186	N	0	\N
+187	N	0	\N
+188	N	0	\N
+189	N	0	\N
+190	N	0	\N
+191	N	0	\N
+192	N	0	\N
+193	N	0	\N
+194	N	0	\N
+195	N	0	\N
+196	N	0	\N
+197	N	0	\N
+198	N	0	\N
+199	N	0	\N
+200	N	0	\N
+201	N	0	\N
+202	N	0	\N
+203	N	0	\N
+204	N	0	\N
+205	N	0	\N
+206	N	0	\N
+207	N	0	\N
+208	N	0	\N
+209	N	0	\N
+210	N	0	\N
+211	N	0	\N
+212	N	0	\N
+213	N	0	\N
+214	N	0	\N
+215	N	0	\N
+216	N	0	\N
+217	N	0	\N
+218	N	0	\N
+219	N	0	\N
+221	N	0	\N
+222	N	0	\N
+223	N	0	\N
+224	N	0	\N
+225	N	0	\N
+226	N	0	\N
+227	N	0	\N
+228	N	0	\N
+229	N	0	\N
+230	N	0	\N
+231	N	0	\N
+232	N	0	\N
+233	N	0	\N
+234	N	0	\N
+235	N	0	\N
+236	N	0	\N
+237	N	0	\N
+238	N	0	\N
+239	N	0	\N
+240	N	0	\N
+241	N	0	\N
+242	N	0	\N
+243	N	0	\N
+244	N	0	\N
+245	N	0	\N
+246	N	0	\N
+247	N	0	\N
+248	N	0	\N
+249	N	0	\N
+250	N	0	\N
+251	N	0	\N
+252	N	0	\N
+253	N	0	\N
+254	N	0	\N
+255	N	0	\N
+256	N	0	\N
+257	N	0	\N
+258	N	0	\N
+259	N	0	\N
+260	N	0	\N
+261	N	0	\N
+262	N	0	\N
+263	N	0	\N
+264	N	0	\N
+265	N	0	\N
+266	N	0	\N
+267	N	0	\N
+269	N	0	\N
+270	N	0	\N
+271	N	0	\N
+272	N	0	\N
+273	N	0	\N
+274	N	0	\N
+275	N	0	\N
+276	N	0	\N
+277	N	0	\N
+278	N	0	\N
+279	N	0	\N
+280	N	0	\N
+281	N	0	\N
+282	N	0	\N
+283	N	0	\N
+284	N	0	\N
+285	N	0	\N
+286	N	0	\N
+287	N	0	\N
+288	N	0	\N
+289	N	0	\N
+290	N	0	\N
+291	N	0	\N
+292	N	0	\N
+293	N	0	\N
+294	N	0	\N
+295	N	0	\N
+296	N	0	\N
+297	N	0	\N
+298	N	0	\N
+299	N	0	\N
+300	N	0	\N
+301	N	0	\N
+302	N	0	\N
+303	N	0	\N
+304	N	0	\N
+305	N	0	\N
+306	N	0	\N
+307	N	0	\N
+308	N	0	\N
+309	N	0	\N
+310	N	0	\N
+311	N	0	\N
+312	N	0	\N
+313	N	0	\N
+314	N	0	\N
+315	N	0	\N
+316	N	0	\N
+317	N	0	\N
+318	N	0	\N
+319	N	0	\N
+320	N	0	\N
+321	N	0	\N
+322	N	0	\N
+323	N	0	\N
+324	N	0	\N
+325	N	0	\N
+326	N	0	\N
+327	N	0	\N
+328	N	0	\N
+329	N	0	\N
+330	N	0	\N
+331	N	0	\N
+332	N	0	\N
+333	N	0	\N
+334	N	0	\N
+335	N	0	\N
+336	N	0	\N
+337	N	0	\N
+338	N	0	\N
+339	N	0	\N
+340	N	0	\N
+341	N	0	\N
+342	N	0	\N
+343	N	0	\N
+344	N	0	\N
+345	N	0	\N
+346	N	0	\N
+347	N	0	\N
+348	N	0	\N
+349	N	0	\N
+350	N	0	\N
+351	N	0	\N
+352	N	0	\N
+353	N	0	\N
+354	N	0	\N
+355	N	0	\N
+356	N	0	\N
+357	N	0	\N
+358	N	0	\N
+359	N	0	\N
+360	N	0	\N
+361	N	0	\N
+362	N	0	\N
+363	N	0	\N
+364	N	0	\N
+365	N	0	\N
+366	N	0	\N
+367	N	0	\N
+368	N	0	\N
+369	N	0	\N
+370	N	0	\N
+268	N	0	2026-05-14 09:54:45.114993
+371	N	0	\N
+372	N	0	\N
+373	N	0	\N
+374	N	0	\N
+375	N	0	\N
+376	N	0	\N
+377	N	0	\N
+378	N	0	\N
+379	N	0	\N
+380	N	0	\N
+381	N	0	\N
+382	N	0	\N
+383	N	0	\N
+384	N	0	\N
+385	N	0	\N
+386	N	0	\N
+387	N	0	\N
+388	N	0	\N
+389	N	0	\N
+390	N	0	\N
+391	N	0	\N
+392	N	0	\N
+393	N	0	\N
+394	N	0	\N
+395	N	0	\N
+396	N	0	\N
+397	N	0	\N
+398	N	0	\N
+399	N	0	\N
+400	N	0	\N
+401	N	0	\N
+402	N	0	\N
+403	N	0	\N
+404	N	0	\N
+405	N	0	\N
+406	N	0	\N
+407	N	0	\N
+408	N	0	\N
+409	N	0	\N
+410	N	0	\N
+411	N	0	\N
+412	N	0	\N
+413	N	0	\N
+414	N	0	\N
+415	N	0	\N
+416	N	0	\N
+417	N	0	\N
+418	N	0	\N
+419	N	0	\N
+420	N	0	\N
+421	N	0	\N
+422	N	0	\N
+423	N	0	\N
+424	N	0	\N
+425	N	0	\N
+426	N	0	\N
+427	N	0	\N
+428	N	0	\N
+429	N	0	\N
+430	N	0	\N
+431	N	0	\N
+432	N	0	\N
+433	N	0	\N
+434	N	0	\N
+435	N	0	\N
+436	N	0	\N
+437	N	0	\N
+438	N	0	\N
+439	N	0	\N
+440	N	0	\N
+441	N	0	\N
+442	N	0	\N
+443	N	0	\N
+444	N	0	\N
+445	N	0	\N
+446	N	0	\N
+447	N	0	\N
+448	N	0	\N
+449	N	0	\N
+450	N	0	\N
+451	N	0	\N
+452	N	0	\N
+453	N	0	\N
+454	N	0	\N
+455	N	0	\N
+456	N	0	\N
+457	N	0	\N
+458	N	0	\N
+459	N	0	\N
+460	N	0	\N
+461	N	0	\N
+462	N	0	\N
+463	N	0	\N
+464	N	0	\N
+465	N	0	\N
+466	N	0	\N
+467	N	0	\N
+468	N	0	\N
+469	N	0	\N
+470	N	0	\N
+471	N	0	\N
+472	N	0	\N
+473	N	0	\N
+474	N	0	\N
+475	N	0	\N
+476	N	0	\N
+477	N	0	\N
+478	N	0	\N
+479	N	0	\N
+480	N	0	\N
+481	N	0	\N
+482	N	0	\N
+483	N	0	\N
+484	N	0	\N
+485	N	0	\N
+486	N	0	\N
+487	N	0	\N
+488	N	0	\N
+489	N	0	\N
+490	N	0	\N
+491	N	0	\N
+492	N	0	\N
+493	N	0	\N
+494	N	0	\N
+495	N	0	\N
+496	N	0	\N
+497	N	0	\N
+498	N	0	\N
+499	N	0	\N
+500	N	0	\N
+501	N	0	\N
+502	N	0	\N
+503	N	0	\N
+504	N	0	\N
+505	N	0	\N
+506	N	0	\N
+507	N	0	\N
+508	N	0	\N
+509	N	0	\N
+510	N	0	\N
+511	N	0	\N
+512	N	0	\N
+513	N	0	\N
+514	N	0	\N
+515	N	0	\N
+516	N	0	\N
+517	N	0	\N
+518	N	0	\N
+519	N	0	\N
+520	N	0	\N
+521	N	0	\N
+522	N	0	\N
+523	N	0	\N
+524	N	0	\N
+525	N	0	\N
+526	N	0	\N
+527	N	0	\N
+528	N	0	\N
+529	N	0	\N
+530	N	0	\N
+531	N	0	\N
+532	N	0	\N
+533	N	0	\N
+534	N	0	\N
+535	N	0	\N
+536	N	0	\N
+537	N	0	\N
+538	N	0	\N
+539	N	0	\N
+540	N	0	\N
+541	N	0	\N
+542	N	0	\N
+543	N	0	\N
+544	N	0	\N
+545	N	0	\N
+546	N	0	\N
+547	N	0	\N
+548	N	0	\N
+549	N	0	\N
+550	N	0	\N
+551	N	0	\N
+552	N	0	\N
+553	N	0	\N
+554	N	0	\N
+555	N	0	\N
+556	N	0	\N
+557	N	0	\N
+558	N	0	\N
+559	N	0	\N
+560	N	0	\N
+561	N	0	\N
+562	N	0	\N
+563	N	0	\N
+564	N	0	\N
+565	N	0	\N
+566	N	0	\N
+567	N	0	\N
+568	N	0	\N
+569	N	0	\N
+570	N	0	\N
+571	N	0	\N
+572	N	0	\N
+573	N	0	\N
+574	N	0	\N
+575	N	0	\N
+576	N	0	\N
+577	N	0	\N
+578	N	0	\N
+579	N	0	\N
+580	N	0	\N
+581	N	0	\N
+582	N	0	\N
+583	N	0	\N
+584	N	0	\N
+585	N	0	\N
+586	N	0	\N
+587	N	0	\N
+588	N	0	\N
+589	N	0	\N
+590	N	0	\N
+591	N	0	\N
+592	N	0	\N
+593	N	0	\N
+594	N	0	\N
+595	N	0	\N
+596	N	0	\N
+597	N	0	\N
+598	N	0	\N
+599	N	0	\N
+600	N	0	\N
+601	N	0	\N
+602	N	0	\N
+603	N	0	\N
+604	N	0	\N
+605	N	0	\N
+606	N	0	\N
+607	N	0	\N
+608	N	0	\N
+609	N	0	\N
+610	N	0	\N
+611	N	0	\N
+612	N	0	\N
+613	N	0	\N
+614	N	0	\N
+615	N	0	\N
+616	N	0	\N
+617	N	0	\N
+618	N	0	\N
+619	N	0	\N
+620	N	0	\N
+621	N	0	\N
+622	N	0	\N
+623	N	0	\N
+624	N	0	\N
+625	N	0	\N
+626	N	0	\N
+627	N	0	\N
+628	N	0	\N
+629	N	0	\N
+630	N	0	\N
+631	N	0	\N
+632	N	0	\N
+633	N	0	\N
+634	N	0	\N
+635	N	0	\N
+636	N	0	\N
+637	N	0	\N
+638	N	0	\N
+639	N	0	\N
+640	N	0	\N
+641	N	0	\N
+642	N	0	\N
+643	N	0	\N
+644	N	0	\N
+645	N	0	\N
+646	N	0	\N
+647	N	0	\N
+648	N	0	\N
+649	N	0	\N
+650	N	0	\N
+651	N	0	\N
+652	N	0	\N
+653	N	0	\N
+654	N	0	\N
+655	N	0	\N
+656	N	0	\N
+657	N	0	\N
+658	N	0	\N
+659	N	0	\N
+660	N	0	\N
+661	N	0	\N
+662	N	0	\N
+663	N	0	\N
+664	N	0	\N
+665	N	0	\N
+666	N	0	\N
+667	N	0	\N
+668	N	0	\N
+669	N	0	\N
+670	N	0	\N
+671	N	0	\N
+672	N	0	\N
+673	N	0	\N
+674	N	0	\N
+675	N	0	\N
+676	N	0	\N
+677	N	0	\N
+678	N	0	\N
+679	N	0	\N
+680	N	0	\N
+681	N	0	\N
+682	N	0	\N
+683	N	0	\N
+684	N	0	\N
+685	N	0	\N
+686	N	0	\N
+687	N	0	\N
+688	N	0	\N
+689	N	0	\N
+690	N	0	\N
+691	N	0	\N
+692	N	0	\N
+693	N	0	\N
+694	N	0	\N
+695	N	0	\N
+696	N	0	\N
+697	N	0	\N
+698	N	0	\N
+699	N	0	\N
+700	N	0	\N
+701	N	0	\N
+702	N	0	\N
+703	N	0	\N
+704	N	0	\N
+705	N	0	\N
+706	N	0	\N
+707	N	0	\N
+708	N	0	\N
+709	N	0	\N
+710	N	0	\N
+711	N	0	\N
+712	N	0	\N
+713	N	0	\N
+714	N	0	\N
+715	N	0	\N
+716	N	0	\N
+717	N	0	\N
+718	N	0	\N
+719	N	0	\N
+720	N	0	\N
+721	N	0	\N
+722	N	0	\N
+723	N	0	\N
+724	N	0	\N
+725	N	0	\N
+726	N	0	\N
+727	N	0	\N
+728	N	0	\N
+729	N	0	\N
+730	N	0	\N
+731	N	0	\N
+732	N	0	\N
+733	N	0	\N
+734	N	0	\N
+735	N	0	\N
+736	N	0	\N
+737	N	0	\N
+738	N	0	\N
+739	N	0	\N
+740	N	0	\N
+741	N	0	\N
+742	N	0	\N
+743	N	0	\N
+744	N	0	\N
+745	N	0	\N
+746	N	0	\N
+747	N	0	\N
+748	N	0	\N
+749	N	0	\N
+750	N	0	\N
+751	N	0	\N
+752	N	0	\N
+753	N	0	\N
+754	N	0	\N
+755	N	0	\N
+756	N	0	\N
+757	N	0	\N
+758	N	0	\N
+759	N	0	\N
+760	N	0	\N
+761	N	0	\N
+762	N	0	\N
+763	N	0	\N
+764	N	0	\N
+765	N	0	\N
+766	N	0	\N
+767	N	0	\N
+768	N	0	\N
+769	N	0	\N
+770	N	0	\N
+771	N	0	\N
+772	N	0	\N
+773	N	0	\N
+774	N	0	\N
+775	N	0	\N
+776	N	0	\N
+777	N	0	\N
+778	N	0	\N
+779	N	0	\N
+780	N	0	\N
+781	N	0	\N
+782	N	0	\N
+783	N	0	\N
+784	N	0	\N
+785	N	0	\N
+786	N	0	\N
+787	N	0	\N
+788	N	0	\N
+789	N	0	\N
+790	N	0	\N
+791	N	0	\N
+792	N	0	\N
+793	N	0	\N
+794	N	0	\N
+795	N	0	\N
+796	N	0	\N
+797	N	0	\N
+798	N	0	\N
+799	N	0	\N
+800	N	0	\N
+801	N	0	\N
+802	N	0	\N
+803	N	0	\N
+804	N	0	\N
+805	N	0	\N
+806	N	0	\N
+807	N	0	\N
+808	N	0	\N
+809	N	0	\N
+810	N	0	\N
+811	N	0	\N
+812	N	0	\N
+813	N	0	\N
+814	N	0	\N
+815	N	0	\N
+816	N	0	\N
+817	N	0	\N
+818	N	0	\N
+819	N	0	\N
+820	N	0	\N
+821	N	0	\N
+822	N	0	\N
+823	N	0	\N
+824	N	0	\N
+825	N	0	\N
+826	N	0	\N
+827	N	0	\N
+828	N	0	\N
+829	N	0	\N
+830	N	0	\N
+831	N	0	\N
+832	N	0	\N
+833	N	0	\N
+834	N	0	\N
+835	N	0	\N
+836	N	0	\N
+837	N	0	\N
+838	N	0	\N
+839	N	0	\N
+840	N	0	\N
+841	N	0	\N
+842	N	0	\N
+843	N	0	\N
+844	N	0	\N
+845	N	0	\N
+846	N	0	\N
+847	N	0	\N
+848	N	0	\N
+849	N	0	\N
+850	N	0	\N
+851	N	0	\N
+852	N	0	\N
+853	N	0	\N
+854	N	0	\N
+855	N	0	\N
+856	N	0	\N
+857	N	0	\N
+858	N	0	\N
+859	N	0	\N
+860	N	0	\N
+861	N	0	\N
+862	N	0	\N
+863	N	0	\N
+864	N	0	\N
+865	N	0	\N
+866	N	0	\N
+867	N	0	\N
+868	N	0	\N
+869	N	0	\N
+870	N	0	\N
+871	N	0	\N
+872	N	0	\N
+873	N	0	\N
+874	N	0	\N
+875	N	0	\N
+876	N	0	\N
+877	N	0	\N
+878	N	0	\N
+879	N	0	\N
+880	N	0	\N
+881	N	0	\N
+882	N	0	\N
+883	N	0	\N
+884	N	0	\N
+885	N	0	\N
+886	N	0	\N
+887	N	0	\N
+888	N	0	\N
+889	N	0	\N
+890	N	0	\N
+891	N	0	\N
+892	N	0	\N
+893	N	0	\N
+894	N	0	\N
+895	N	0	\N
+896	N	0	\N
+897	N	0	\N
+898	N	0	\N
+899	N	0	\N
+900	N	0	\N
+901	N	0	\N
+902	N	0	\N
+903	N	0	\N
+904	N	0	\N
+905	N	0	\N
+906	N	0	\N
+907	N	0	\N
+908	N	0	\N
+909	N	0	\N
+910	N	0	\N
+911	N	0	\N
+912	N	0	\N
+913	N	0	\N
+914	N	0	\N
+915	N	0	\N
+916	N	0	\N
+917	N	0	\N
+918	N	0	\N
+919	N	0	\N
+920	N	0	\N
+921	N	0	\N
+922	N	0	\N
+923	N	0	\N
+924	N	0	\N
+925	N	0	\N
+926	N	0	\N
+927	N	0	\N
+928	N	0	\N
+929	N	0	\N
+930	N	0	\N
+931	N	0	\N
+932	N	0	\N
+933	N	0	\N
+934	N	0	\N
+935	N	0	\N
+936	N	0	\N
+937	N	0	\N
+938	N	0	\N
+939	N	0	\N
+940	N	0	\N
+941	N	0	\N
+942	N	0	\N
+943	N	0	\N
+944	N	0	\N
+945	N	0	\N
+946	N	0	\N
+947	N	0	\N
+948	N	0	\N
+949	N	0	\N
+950	N	0	\N
+951	N	0	\N
+952	N	0	\N
+953	N	0	\N
+954	N	0	\N
+955	N	0	\N
+956	N	0	\N
+957	N	0	\N
+958	N	0	\N
+959	N	0	\N
+960	N	0	\N
+961	N	0	\N
+962	N	0	\N
+963	N	0	\N
+964	N	0	\N
+965	N	0	\N
+966	N	0	\N
+967	N	0	\N
+968	N	0	\N
+969	N	0	\N
+970	N	0	\N
+971	N	0	\N
+972	N	0	\N
+973	N	0	\N
+974	N	0	\N
+975	N	0	\N
+976	N	0	\N
+977	N	0	\N
+978	N	0	\N
+979	N	0	\N
+980	N	0	\N
+981	N	0	\N
+982	N	0	\N
+983	N	0	\N
+984	N	0	\N
+985	N	0	\N
+986	N	0	\N
+987	N	0	\N
+988	N	0	\N
+989	N	0	\N
+990	N	0	\N
+991	N	0	\N
+992	N	0	\N
+993	N	0	\N
+994	N	0	\N
+1	N	0	2026-05-13 23:54:22.997533
+220	N	0	2026-05-14 09:54:44.619894
+\.
+
+
+--
+-- Data for Name: album_figurinha; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.album_figurinha (id, album_id, figurinha_id, possui, data_atualizacao) FROM stdin;
+1	1	2	N	\N
+2	1	3	N	\N
+3	1	4	N	\N
+4	1	5	N	\N
+5	1	6	N	\N
+6	1	7	N	\N
+7	1	8	N	\N
+8	1	9	N	\N
+9	1	10	N	\N
+10	1	11	N	\N
+11	1	12	N	\N
+12	1	13	N	\N
+13	1	14	N	\N
+14	1	15	N	\N
+15	1	16	N	\N
+16	1	17	N	\N
+17	1	18	N	\N
+18	1	19	N	\N
+19	1	20	N	\N
+20	1	21	N	\N
+21	1	22	N	\N
+22	1	23	N	\N
+23	1	24	N	\N
+24	1	25	N	\N
+25	1	26	N	\N
+26	1	27	N	\N
+27	1	28	N	\N
+28	1	29	N	\N
+29	1	30	N	\N
+30	1	31	N	\N
+31	1	32	N	\N
+32	1	33	N	\N
+33	1	34	N	\N
+34	1	35	N	\N
+35	1	36	N	\N
+36	1	37	N	\N
+37	1	38	N	\N
+38	1	39	N	\N
+39	1	40	N	\N
+40	1	41	N	\N
+41	1	42	N	\N
+42	1	43	N	\N
+43	1	44	N	\N
+44	1	45	N	\N
+45	1	46	N	\N
+46	1	47	N	\N
+47	1	48	N	\N
+48	1	49	N	\N
+49	1	50	N	\N
+50	1	51	N	\N
+51	1	52	N	\N
+52	1	53	N	\N
+53	1	54	N	\N
+54	1	55	N	\N
+55	1	56	N	\N
+56	1	57	N	\N
+57	1	58	N	\N
+58	1	59	N	\N
+59	1	60	N	\N
+60	1	61	N	\N
+61	1	62	N	\N
+62	1	63	N	\N
+63	1	64	N	\N
+64	1	65	N	\N
+65	1	66	N	\N
+66	1	67	N	\N
+67	1	68	N	\N
+68	1	69	N	\N
+69	1	70	N	\N
+70	1	71	N	\N
+71	1	72	N	\N
+72	1	73	N	\N
+73	1	74	N	\N
+74	1	75	N	\N
+75	1	76	N	\N
+76	1	77	N	\N
+77	1	78	N	\N
+78	1	79	N	\N
+79	1	80	N	\N
+80	1	81	N	\N
+81	1	82	N	\N
+82	1	83	N	\N
+83	1	84	N	\N
+84	1	85	N	\N
+85	1	86	N	\N
+86	1	87	N	\N
+87	1	88	N	\N
+88	1	89	N	\N
+89	1	90	N	\N
+90	1	91	N	\N
+91	1	92	N	\N
+92	1	93	N	\N
+93	1	94	N	\N
+94	1	95	N	\N
+95	1	96	N	\N
+96	1	97	N	\N
+97	1	98	N	\N
+98	1	99	N	\N
+99	1	100	N	\N
+100	1	101	N	\N
+101	1	102	N	\N
+102	1	103	N	\N
+103	1	104	N	\N
+104	1	105	N	\N
+105	1	106	N	\N
+106	1	107	N	\N
+107	1	108	N	\N
+108	1	109	N	\N
+109	1	110	N	\N
+110	1	111	N	\N
+111	1	112	N	\N
+112	1	113	N	\N
+113	1	114	N	\N
+114	1	115	N	\N
+116	1	117	N	\N
+117	1	118	N	\N
+118	1	119	N	\N
+119	1	120	N	\N
+120	1	121	N	\N
+121	1	122	N	\N
+122	1	123	N	\N
+123	1	124	N	\N
+124	1	125	N	\N
+125	1	126	N	\N
+126	1	127	N	\N
+127	1	128	N	\N
+128	1	129	N	\N
+129	1	130	N	\N
+130	1	131	N	\N
+131	1	132	N	\N
+132	1	133	N	\N
+133	1	134	N	\N
+134	1	135	N	\N
+135	1	136	N	\N
+136	1	137	N	\N
+137	1	138	N	\N
+138	1	139	N	\N
+139	1	140	N	\N
+140	1	141	N	\N
+141	1	142	N	\N
+142	1	143	N	\N
+143	1	144	N	\N
+144	1	145	N	\N
+145	1	146	N	\N
+146	1	147	N	\N
+147	1	148	N	\N
+148	1	149	N	\N
+149	1	150	N	\N
+150	1	151	N	\N
+151	1	152	N	\N
+152	1	153	N	\N
+153	1	154	N	\N
+154	1	155	N	\N
+155	1	156	N	\N
+156	1	157	N	\N
+157	1	158	N	\N
+158	1	159	N	\N
+159	1	160	N	\N
+160	1	161	N	\N
+161	1	162	N	\N
+162	1	163	N	\N
+164	1	165	N	\N
+165	1	166	N	\N
+166	1	167	N	\N
+167	1	168	N	\N
+168	1	169	N	\N
+169	1	170	N	\N
+170	1	171	N	\N
+171	1	173	N	\N
+172	1	174	N	\N
+173	1	175	N	\N
+174	1	176	N	\N
+175	1	177	N	\N
+176	1	178	N	\N
+177	1	179	N	\N
+178	1	180	N	\N
+179	1	181	N	\N
+180	1	182	N	\N
+181	1	183	N	\N
+182	1	184	N	\N
+183	1	185	N	\N
+184	1	172	N	2026-05-14 09:54:45.883202
+185	1	186	N	\N
+186	1	187	N	\N
+187	1	188	N	\N
+188	1	189	N	\N
+189	1	190	N	\N
+190	1	191	N	\N
+191	1	192	N	\N
+192	1	193	N	\N
+193	1	194	N	\N
+194	1	195	N	\N
+195	1	196	N	\N
+196	1	197	N	\N
+197	1	198	N	\N
+198	1	199	N	\N
+199	1	200	N	\N
+200	1	201	N	\N
+201	1	202	N	\N
+202	1	203	N	\N
+203	1	204	N	\N
+204	1	205	N	\N
+205	1	206	N	\N
+206	1	207	N	\N
+207	1	208	N	\N
+208	1	209	N	\N
+209	1	210	N	\N
+210	1	211	N	\N
+211	1	212	N	\N
+212	1	213	N	\N
+213	1	214	N	\N
+214	1	215	N	\N
+215	1	216	N	\N
+216	1	217	N	\N
+217	1	218	N	\N
+218	1	219	N	\N
+219	1	221	N	\N
+220	1	222	N	\N
+221	1	223	N	\N
+222	1	224	N	\N
+223	1	225	N	\N
+224	1	226	N	\N
+225	1	227	N	\N
+226	1	228	N	\N
+227	1	229	N	\N
+228	1	230	N	\N
+229	1	231	N	\N
+230	1	232	N	\N
+231	1	233	N	\N
+232	1	234	N	\N
+233	1	235	N	\N
+234	1	236	N	\N
+235	1	237	N	\N
+236	1	238	N	\N
+237	1	239	N	\N
+238	1	240	N	\N
+239	1	241	N	\N
+240	1	242	N	\N
+241	1	243	N	\N
+242	1	244	N	\N
+243	1	245	N	\N
+244	1	246	N	\N
+245	1	247	N	\N
+246	1	248	N	\N
+247	1	249	N	\N
+248	1	250	N	\N
+249	1	251	N	\N
+250	1	252	N	\N
+251	1	253	N	\N
+252	1	254	N	\N
+253	1	255	N	\N
+254	1	256	N	\N
+255	1	257	N	\N
+256	1	258	N	\N
+257	1	259	N	\N
+258	1	260	N	\N
+259	1	261	N	\N
+260	1	262	N	\N
+261	1	263	N	\N
+262	1	264	N	\N
+263	1	265	N	\N
+264	1	266	N	\N
+265	1	267	N	\N
+266	1	269	N	\N
+267	1	270	N	\N
+268	1	271	N	\N
+269	1	272	N	\N
+270	1	273	N	\N
+271	1	274	N	\N
+272	1	275	N	\N
+273	1	276	N	\N
+274	1	277	N	\N
+275	1	278	N	\N
+276	1	279	N	\N
+277	1	280	N	\N
+278	1	281	N	\N
+279	1	282	N	\N
+280	1	283	N	\N
+281	1	284	N	\N
+282	1	285	N	\N
+283	1	286	N	\N
+284	1	287	N	\N
+285	1	288	N	\N
+286	1	289	N	\N
+287	1	290	N	\N
+288	1	291	N	\N
+289	1	292	N	\N
+290	1	293	N	\N
+291	1	294	N	\N
+292	1	295	N	\N
+293	1	296	N	\N
+294	1	297	N	\N
+295	1	298	N	\N
+296	1	299	N	\N
+297	1	300	N	\N
+298	1	301	N	\N
+299	1	302	N	\N
+300	1	303	N	\N
+301	1	304	N	\N
+302	1	305	N	\N
+303	1	306	N	\N
+304	1	307	N	\N
+305	1	308	N	\N
+306	1	309	N	\N
+307	1	310	N	\N
+308	1	311	N	\N
+309	1	312	N	\N
+310	1	313	N	\N
+311	1	314	N	\N
+312	1	315	N	\N
+313	1	316	N	\N
+314	1	317	N	\N
+315	1	318	N	\N
+316	1	319	N	\N
+317	1	320	N	\N
+318	1	321	N	\N
+319	1	322	N	\N
+320	1	323	N	\N
+321	1	324	N	\N
+322	1	325	N	\N
+323	1	326	N	\N
+324	1	327	N	\N
+325	1	328	N	\N
+326	1	329	N	\N
+327	1	330	N	\N
+328	1	331	N	\N
+329	1	332	N	\N
+330	1	333	N	\N
+331	1	334	N	\N
+332	1	335	N	\N
+333	1	336	N	\N
+334	1	337	N	\N
+335	1	338	N	\N
+336	1	339	N	\N
+337	1	340	N	\N
+338	1	341	N	\N
+339	1	342	N	\N
+340	1	343	N	\N
+341	1	344	N	\N
+342	1	345	N	\N
+343	1	346	N	\N
+344	1	347	N	\N
+345	1	348	N	\N
+346	1	349	N	\N
+347	1	350	N	\N
+348	1	351	N	\N
+349	1	352	N	\N
+350	1	353	N	\N
+351	1	354	N	\N
+352	1	355	N	\N
+353	1	356	N	\N
+354	1	357	N	\N
+355	1	358	N	\N
+356	1	359	N	\N
+357	1	360	N	\N
+358	1	361	N	\N
+359	1	362	N	\N
+360	1	363	N	\N
+361	1	364	N	\N
+362	1	365	N	\N
+363	1	366	N	\N
+364	1	367	N	\N
+365	1	368	N	\N
+366	1	369	N	\N
+367	1	370	N	\N
+368	1	268	N	2026-05-14 09:54:45.114993
+369	1	371	N	\N
+370	1	372	N	\N
+371	1	373	N	\N
+372	1	374	N	\N
+373	1	375	N	\N
+374	1	376	N	\N
+375	1	377	N	\N
+376	1	378	N	\N
+377	1	379	N	\N
+378	1	380	N	\N
+379	1	381	N	\N
+380	1	382	N	\N
+381	1	383	N	\N
+382	1	384	N	\N
+383	1	385	N	\N
+384	1	386	N	\N
+385	1	387	N	\N
+386	1	388	N	\N
+387	1	389	N	\N
+388	1	390	N	\N
+389	1	391	N	\N
+390	1	392	N	\N
+391	1	393	N	\N
+392	1	394	N	\N
+393	1	395	N	\N
+394	1	396	N	\N
+395	1	397	N	\N
+396	1	398	N	\N
+397	1	399	N	\N
+398	1	400	N	\N
+399	1	401	N	\N
+400	1	402	N	\N
+401	1	403	N	\N
+402	1	404	N	\N
+403	1	405	N	\N
+404	1	406	N	\N
+405	1	407	N	\N
+406	1	408	N	\N
+407	1	409	N	\N
+408	1	410	N	\N
+409	1	411	N	\N
+410	1	412	N	\N
+411	1	413	N	\N
+412	1	414	N	\N
+413	1	415	N	\N
+414	1	416	N	\N
+415	1	417	N	\N
+416	1	418	N	\N
+417	1	419	N	\N
+418	1	420	N	\N
+419	1	421	N	\N
+420	1	422	N	\N
+421	1	423	N	\N
+422	1	424	N	\N
+423	1	425	N	\N
+424	1	426	N	\N
+425	1	427	N	\N
+426	1	428	N	\N
+427	1	429	N	\N
+428	1	430	N	\N
+429	1	431	N	\N
+430	1	432	N	\N
+431	1	433	N	\N
+432	1	434	N	\N
+433	1	435	N	\N
+434	1	436	N	\N
+435	1	437	N	\N
+436	1	438	N	\N
+437	1	439	N	\N
+438	1	440	N	\N
+439	1	441	N	\N
+440	1	442	N	\N
+441	1	443	N	\N
+442	1	444	N	\N
+443	1	445	N	\N
+444	1	446	N	\N
+445	1	447	N	\N
+446	1	448	N	\N
+447	1	449	N	\N
+448	1	450	N	\N
+449	1	451	N	\N
+450	1	452	N	\N
+451	1	453	N	\N
+452	1	454	N	\N
+453	1	455	N	\N
+454	1	456	N	\N
+455	1	457	N	\N
+456	1	458	N	\N
+457	1	459	N	\N
+458	1	460	N	\N
+459	1	461	N	\N
+460	1	462	N	\N
+461	1	463	N	\N
+462	1	464	N	\N
+463	1	465	N	\N
+464	1	466	N	\N
+465	1	467	N	\N
+466	1	468	N	\N
+467	1	469	N	\N
+468	1	470	N	\N
+469	1	471	N	\N
+470	1	472	N	\N
+471	1	473	N	\N
+472	1	474	N	\N
+473	1	475	N	\N
+474	1	476	N	\N
+475	1	477	N	\N
+476	1	478	N	\N
+477	1	479	N	\N
+478	1	480	N	\N
+479	1	481	N	\N
+480	1	482	N	\N
+481	1	483	N	\N
+482	1	484	N	\N
+483	1	485	N	\N
+484	1	486	N	\N
+485	1	487	N	\N
+486	1	488	N	\N
+487	1	489	N	\N
+488	1	490	N	\N
+489	1	491	N	\N
+490	1	492	N	\N
+491	1	493	N	\N
+492	1	494	N	\N
+493	1	495	N	\N
+494	1	496	N	\N
+495	1	497	N	\N
+496	1	498	N	\N
+497	1	499	N	\N
+498	1	500	N	\N
+499	1	501	N	\N
+500	1	502	N	\N
+501	1	503	N	\N
+502	1	504	N	\N
+503	1	505	N	\N
+504	1	506	N	\N
+505	1	507	N	\N
+506	1	508	N	\N
+507	1	509	N	\N
+508	1	510	N	\N
+509	1	511	N	\N
+510	1	512	N	\N
+511	1	513	N	\N
+512	1	514	N	\N
+513	1	515	N	\N
+514	1	516	N	\N
+515	1	517	N	\N
+516	1	518	N	\N
+517	1	519	N	\N
+518	1	520	N	\N
+519	1	521	N	\N
+520	1	522	N	\N
+521	1	523	N	\N
+522	1	524	N	\N
+523	1	525	N	\N
+524	1	526	N	\N
+525	1	527	N	\N
+526	1	528	N	\N
+527	1	529	N	\N
+528	1	530	N	\N
+529	1	531	N	\N
+530	1	532	N	\N
+531	1	533	N	\N
+532	1	534	N	\N
+533	1	535	N	\N
+534	1	536	N	\N
+535	1	537	N	\N
+536	1	538	N	\N
+537	1	539	N	\N
+538	1	540	N	\N
+539	1	541	N	\N
+540	1	542	N	\N
+541	1	543	N	\N
+542	1	544	N	\N
+543	1	545	N	\N
+544	1	546	N	\N
+545	1	547	N	\N
+546	1	548	N	\N
+547	1	549	N	\N
+548	1	550	N	\N
+549	1	551	N	\N
+550	1	552	N	\N
+551	1	553	N	\N
+552	1	554	N	\N
+553	1	555	N	\N
+554	1	556	N	\N
+555	1	557	N	\N
+556	1	558	N	\N
+557	1	559	N	\N
+558	1	560	N	\N
+559	1	561	N	\N
+560	1	562	N	\N
+561	1	563	N	\N
+562	1	564	N	\N
+563	1	565	N	\N
+564	1	566	N	\N
+565	1	567	N	\N
+566	1	568	N	\N
+567	1	569	N	\N
+568	1	570	N	\N
+569	1	571	N	\N
+570	1	572	N	\N
+571	1	573	N	\N
+572	1	574	N	\N
+573	1	575	N	\N
+574	1	576	N	\N
+575	1	577	N	\N
+576	1	578	N	\N
+577	1	579	N	\N
+578	1	580	N	\N
+579	1	581	N	\N
+580	1	582	N	\N
+581	1	583	N	\N
+582	1	584	N	\N
+583	1	585	N	\N
+584	1	586	N	\N
+585	1	587	N	\N
+586	1	588	N	\N
+587	1	589	N	\N
+588	1	590	N	\N
+589	1	591	N	\N
+590	1	592	N	\N
+591	1	593	N	\N
+592	1	594	N	\N
+593	1	595	N	\N
+594	1	596	N	\N
+596	1	598	N	\N
+597	1	599	N	\N
+598	1	600	N	\N
+599	1	601	N	\N
+600	1	602	N	\N
+601	1	603	N	\N
+602	1	604	N	\N
+603	1	605	N	\N
+604	1	606	N	\N
+605	1	607	N	\N
+606	1	608	N	\N
+607	1	609	N	\N
+608	1	610	N	\N
+609	1	611	N	\N
+610	1	612	N	\N
+611	1	613	N	\N
+612	1	614	N	\N
+613	1	615	N	\N
+614	1	616	N	\N
+615	1	617	N	\N
+616	1	618	N	\N
+617	1	619	N	\N
+618	1	620	N	\N
+619	1	621	N	\N
+620	1	622	N	\N
+621	1	623	N	\N
+622	1	624	N	\N
+623	1	625	N	\N
+624	1	626	N	\N
+625	1	627	N	\N
+626	1	628	N	\N
+627	1	629	N	\N
+628	1	630	N	\N
+629	1	631	N	\N
+630	1	632	N	\N
+631	1	633	N	\N
+632	1	634	N	\N
+633	1	635	N	\N
+634	1	636	N	\N
+635	1	637	N	\N
+636	1	638	N	\N
+637	1	639	N	\N
+638	1	640	N	\N
+639	1	641	N	\N
+640	1	642	N	\N
+641	1	643	N	\N
+642	1	644	N	\N
+643	1	645	N	\N
+644	1	646	N	\N
+645	1	647	N	\N
+646	1	648	N	\N
+647	1	649	N	\N
+648	1	650	N	\N
+649	1	651	N	\N
+650	1	652	N	\N
+651	1	653	N	\N
+652	1	654	N	\N
+653	1	655	N	\N
+654	1	656	N	\N
+655	1	657	N	\N
+656	1	658	N	\N
+657	1	659	N	\N
+658	1	660	N	\N
+659	1	661	N	\N
+660	1	662	N	\N
+661	1	663	N	\N
+662	1	664	N	\N
+663	1	665	N	\N
+664	1	666	N	\N
+665	1	667	N	\N
+666	1	668	N	\N
+667	1	669	N	\N
+668	1	670	N	\N
+669	1	671	N	\N
+670	1	672	N	\N
+671	1	673	N	\N
+672	1	674	N	\N
+673	1	675	N	\N
+674	1	676	N	\N
+675	1	677	N	\N
+676	1	678	N	\N
+677	1	679	N	\N
+678	1	680	N	\N
+679	1	681	N	\N
+680	1	682	N	\N
+681	1	683	N	\N
+682	1	684	N	\N
+683	1	685	N	\N
+684	1	686	N	\N
+685	1	687	N	\N
+686	1	688	N	\N
+687	1	689	N	\N
+688	1	690	N	\N
+689	1	691	N	\N
+690	1	692	N	\N
+691	1	693	N	\N
+692	1	694	N	\N
+693	1	695	N	\N
+694	1	696	N	\N
+695	1	697	N	\N
+696	1	698	N	\N
+697	1	699	N	\N
+698	1	700	N	\N
+699	1	701	N	\N
+700	1	702	N	\N
+701	1	703	N	\N
+702	1	704	N	\N
+703	1	705	N	\N
+704	1	706	N	\N
+705	1	707	N	\N
+706	1	708	N	\N
+707	1	709	N	\N
+708	1	710	N	\N
+709	1	711	N	\N
+710	1	712	N	\N
+711	1	713	N	\N
+712	1	714	N	\N
+713	1	715	N	\N
+714	1	716	N	\N
+715	1	717	N	\N
+716	1	718	N	\N
+717	1	719	N	\N
+718	1	720	N	\N
+719	1	721	N	\N
+720	1	722	N	\N
+721	1	723	N	\N
+722	1	724	N	\N
+723	1	725	N	\N
+724	1	726	N	\N
+725	1	727	N	\N
+726	1	728	N	\N
+727	1	729	N	\N
+728	1	730	N	\N
+729	1	731	N	\N
+730	1	732	N	\N
+731	1	733	N	\N
+732	1	734	N	\N
+733	1	735	N	\N
+734	1	736	N	\N
+735	1	737	N	\N
+736	1	738	N	\N
+737	1	739	N	\N
+738	1	740	N	\N
+739	1	741	N	\N
+740	1	742	N	\N
+741	1	743	N	\N
+742	1	744	N	\N
+743	1	745	N	\N
+744	1	746	N	\N
+745	1	747	N	\N
+746	1	748	N	\N
+747	1	749	N	\N
+748	1	750	N	\N
+749	1	751	N	\N
+750	1	752	N	\N
+751	1	753	N	\N
+752	1	754	N	\N
+753	1	755	N	\N
+754	1	756	N	\N
+755	1	757	N	\N
+756	1	758	N	\N
+757	1	759	N	\N
+758	1	760	N	\N
+759	1	761	N	\N
+760	1	762	N	\N
+761	1	763	N	\N
+762	1	764	N	\N
+763	1	765	N	\N
+764	1	766	N	\N
+765	1	767	N	\N
+766	1	768	N	\N
+767	1	769	N	\N
+768	1	770	N	\N
+769	1	771	N	\N
+770	1	772	N	\N
+771	1	773	N	\N
+772	1	774	N	\N
+773	1	775	N	\N
+774	1	776	N	\N
+775	1	777	N	\N
+776	1	778	N	\N
+777	1	779	N	\N
+778	1	780	N	\N
+779	1	781	N	\N
+780	1	782	N	\N
+781	1	783	N	\N
+782	1	784	N	\N
+783	1	785	N	\N
+784	1	786	N	\N
+785	1	787	N	\N
+786	1	788	N	\N
+787	1	789	N	\N
+788	1	790	N	\N
+789	1	791	N	\N
+790	1	792	N	\N
+791	1	793	N	\N
+792	1	794	N	\N
+793	1	795	N	\N
+794	1	796	N	\N
+795	1	797	N	\N
+796	1	798	N	\N
+797	1	799	N	\N
+798	1	800	N	\N
+799	1	801	N	\N
+800	1	802	N	\N
+801	1	803	N	\N
+802	1	804	N	\N
+803	1	805	N	\N
+804	1	806	N	\N
+805	1	807	N	\N
+806	1	808	N	\N
+807	1	809	N	\N
+808	1	810	N	\N
+809	1	811	N	\N
+810	1	812	N	\N
+811	1	813	N	\N
+812	1	814	N	\N
+813	1	815	N	\N
+814	1	816	N	\N
+815	1	817	N	\N
+816	1	818	N	\N
+817	1	819	N	\N
+818	1	820	N	\N
+819	1	821	N	\N
+820	1	822	N	\N
+821	1	823	N	\N
+822	1	824	N	\N
+823	1	825	N	\N
+824	1	826	N	\N
+825	1	827	N	\N
+826	1	828	N	\N
+827	1	829	N	\N
+828	1	830	N	\N
+829	1	831	N	\N
+830	1	832	N	\N
+831	1	833	N	\N
+832	1	834	N	\N
+833	1	835	N	\N
+834	1	836	N	\N
+835	1	837	N	\N
+836	1	838	N	\N
+837	1	839	N	\N
+838	1	840	N	\N
+839	1	841	N	\N
+840	1	842	N	\N
+841	1	843	N	\N
+842	1	844	N	\N
+843	1	845	N	\N
+844	1	846	N	\N
+845	1	847	N	\N
+846	1	848	N	\N
+847	1	849	N	\N
+848	1	850	N	\N
+849	1	851	N	\N
+850	1	852	N	\N
+851	1	853	N	\N
+852	1	854	N	\N
+853	1	855	N	\N
+854	1	856	N	\N
+855	1	857	N	\N
+856	1	858	N	\N
+857	1	859	N	\N
+858	1	860	N	\N
+859	1	861	N	\N
+860	1	862	N	\N
+861	1	863	N	\N
+862	1	864	N	\N
+863	1	865	N	\N
+864	1	866	N	\N
+865	1	867	N	\N
+866	1	868	N	\N
+867	1	869	N	\N
+868	1	870	N	\N
+869	1	871	N	\N
+870	1	872	N	\N
+871	1	873	N	\N
+872	1	874	N	\N
+873	1	875	N	\N
+874	1	876	N	\N
+875	1	877	N	\N
+876	1	878	N	\N
+877	1	879	N	\N
+878	1	880	N	\N
+879	1	881	N	\N
+880	1	882	N	\N
+881	1	883	N	\N
+882	1	884	N	\N
+883	1	885	N	\N
+884	1	886	N	\N
+885	1	887	N	\N
+886	1	888	N	\N
+887	1	889	N	\N
+888	1	890	N	\N
+889	1	891	N	\N
+890	1	892	N	\N
+891	1	893	N	\N
+892	1	894	N	\N
+893	1	895	N	\N
+894	1	896	N	\N
+895	1	897	N	\N
+896	1	898	N	\N
+897	1	899	N	\N
+898	1	900	N	\N
+899	1	901	N	\N
+900	1	902	N	\N
+901	1	903	N	\N
+902	1	904	N	\N
+903	1	905	N	\N
+904	1	906	N	\N
+905	1	907	N	\N
+906	1	908	N	\N
+907	1	909	N	\N
+908	1	910	N	\N
+909	1	911	N	\N
+910	1	912	N	\N
+911	1	913	N	\N
+912	1	914	N	\N
+913	1	915	N	\N
+914	1	916	N	\N
+915	1	917	N	\N
+916	1	918	N	\N
+917	1	919	N	\N
+918	1	920	N	\N
+919	1	921	N	\N
+920	1	922	N	\N
+921	1	923	N	\N
+922	1	924	N	\N
+923	1	925	N	\N
+924	1	926	N	\N
+925	1	927	N	\N
+926	1	928	N	\N
+927	1	929	N	\N
+928	1	930	N	\N
+929	1	931	N	\N
+930	1	932	N	\N
+931	1	933	N	\N
+932	1	934	N	\N
+933	1	935	N	\N
+934	1	936	N	\N
+935	1	937	N	\N
+936	1	938	N	\N
+937	1	939	N	\N
+938	1	940	N	\N
+939	1	941	N	\N
+940	1	942	N	\N
+941	1	943	N	\N
+942	1	944	N	\N
+943	1	945	N	\N
+944	1	946	N	\N
+945	1	947	N	\N
+946	1	948	N	\N
+947	1	949	N	\N
+948	1	950	N	\N
+949	1	951	N	\N
+950	1	952	N	\N
+951	1	953	N	\N
+952	1	954	N	\N
+953	1	955	N	\N
+954	1	956	N	\N
+955	1	957	N	\N
+956	1	958	N	\N
+957	1	959	N	\N
+958	1	960	N	\N
+959	1	961	N	\N
+960	1	962	N	\N
+961	1	963	N	\N
+962	1	964	N	\N
+963	1	965	N	\N
+964	1	966	N	\N
+965	1	967	N	\N
+966	1	968	N	\N
+967	1	969	N	\N
+968	1	970	N	\N
+969	1	971	N	\N
+970	1	972	N	\N
+971	1	973	N	\N
+972	1	974	N	\N
+973	1	975	N	\N
+974	1	976	N	\N
+975	1	977	N	\N
+976	1	978	N	\N
+977	1	979	N	\N
+978	1	980	N	\N
+979	1	981	N	\N
+980	1	982	N	\N
+981	1	983	N	\N
+982	1	984	N	\N
+983	1	985	N	\N
+984	1	986	N	\N
+985	1	987	N	\N
+986	1	988	N	\N
+987	1	989	N	\N
+988	1	990	N	\N
+989	1	991	N	\N
+990	1	992	N	\N
+991	1	993	N	\N
+992	1	994	N	\N
+993	1	1	N	2026-05-13 23:54:22.997533
+994	1	220	N	2026-05-14 09:54:44.619894
+995	2	1	N	\N
+996	2	2	N	\N
+997	2	3	N	\N
+998	2	4	N	\N
+999	2	5	N	\N
+1000	2	6	N	\N
+1001	2	7	N	\N
+1002	2	8	N	\N
+1003	2	9	N	\N
+1004	2	10	N	\N
+1005	2	11	N	\N
+1006	2	12	N	\N
+1007	2	13	N	\N
+1008	2	14	N	\N
+1009	2	15	N	\N
+1010	2	16	N	\N
+1011	2	17	N	\N
+1012	2	18	N	\N
+1013	2	19	N	\N
+1014	2	20	N	\N
+1015	2	21	N	\N
+1016	2	22	N	\N
+1017	2	23	N	\N
+1018	2	24	N	\N
+1019	2	25	N	\N
+1020	2	26	N	\N
+1021	2	27	N	\N
+1022	2	28	N	\N
+1023	2	29	N	\N
+1024	2	30	N	\N
+1025	2	31	N	\N
+1026	2	32	N	\N
+1027	2	33	N	\N
+1028	2	34	N	\N
+1029	2	35	N	\N
+1030	2	36	N	\N
+1031	2	37	N	\N
+1032	2	38	N	\N
+1033	2	39	N	\N
+1034	2	40	N	\N
+1035	2	41	N	\N
+1036	2	42	N	\N
+1037	2	43	N	\N
+1038	2	44	N	\N
+1039	2	45	N	\N
+1040	2	46	N	\N
+1041	2	47	N	\N
+1042	2	48	N	\N
+1043	2	49	N	\N
+1044	2	50	N	\N
+1045	2	51	N	\N
+1046	2	52	N	\N
+1047	2	53	N	\N
+1048	2	54	N	\N
+1049	2	55	N	\N
+1050	2	56	N	\N
+1051	2	57	N	\N
+1052	2	58	N	\N
+1053	2	59	N	\N
+1054	2	60	N	\N
+1055	2	61	N	\N
+1056	2	62	N	\N
+1057	2	63	N	\N
+1058	2	64	N	\N
+1059	2	65	N	\N
+1060	2	66	N	\N
+1061	2	67	N	\N
+1062	2	68	N	\N
+1063	2	69	N	\N
+1064	2	70	N	\N
+1065	2	71	N	\N
+1066	2	72	N	\N
+1067	2	73	N	\N
+1068	2	74	N	\N
+1069	2	75	N	\N
+1070	2	76	N	\N
+1071	2	77	N	\N
+1072	2	78	N	\N
+1073	2	79	N	\N
+1074	2	80	N	\N
+1075	2	81	N	\N
+1076	2	82	N	\N
+1077	2	83	N	\N
+1078	2	84	N	\N
+1079	2	85	N	\N
+1080	2	86	N	\N
+1081	2	87	N	\N
+1082	2	88	N	\N
+1083	2	89	N	\N
+1084	2	90	N	\N
+1085	2	91	N	\N
+1086	2	92	N	\N
+1087	2	93	N	\N
+1088	2	94	N	\N
+1089	2	95	N	\N
+1090	2	96	N	\N
+1091	2	97	N	\N
+1092	2	98	N	\N
+1093	2	99	N	\N
+1094	2	100	N	\N
+1095	2	101	N	\N
+1096	2	102	N	\N
+1097	2	103	N	\N
+1098	2	104	N	\N
+1099	2	105	N	\N
+1100	2	106	N	\N
+1101	2	107	N	\N
+1102	2	108	N	\N
+1103	2	109	N	\N
+1104	2	110	N	\N
+1105	2	111	N	\N
+1106	2	112	N	\N
+1107	2	113	N	\N
+1108	2	114	N	\N
+1109	2	115	N	\N
+1110	2	116	N	\N
+1111	2	117	N	\N
+1112	2	118	N	\N
+1113	2	119	N	\N
+1114	2	120	N	\N
+1115	2	121	N	\N
+1116	2	122	N	\N
+1117	2	123	N	\N
+1118	2	124	N	\N
+1119	2	125	N	\N
+1120	2	126	N	\N
+1121	2	127	N	\N
+1122	2	128	N	\N
+1123	2	129	N	\N
+1124	2	130	N	\N
+1125	2	131	N	\N
+1126	2	132	N	\N
+1127	2	133	N	\N
+1128	2	134	N	\N
+1129	2	135	N	\N
+1130	2	136	N	\N
+1131	2	137	N	\N
+1132	2	138	N	\N
+1133	2	139	N	\N
+1134	2	140	N	\N
+1135	2	141	N	\N
+1136	2	142	N	\N
+1137	2	143	N	\N
+1138	2	144	N	\N
+1139	2	145	N	\N
+1140	2	146	N	\N
+1141	2	147	N	\N
+1142	2	148	N	\N
+1143	2	149	N	\N
+1144	2	150	N	\N
+1145	2	151	N	\N
+1146	2	152	N	\N
+1147	2	153	N	\N
+1148	2	154	N	\N
+1149	2	155	N	\N
+1150	2	156	N	\N
+1151	2	157	N	\N
+1152	2	158	N	\N
+1153	2	159	N	\N
+1154	2	160	N	\N
+1155	2	161	N	\N
+1156	2	162	N	\N
+1157	2	163	N	\N
+1158	2	164	N	\N
+1159	2	165	N	\N
+1160	2	166	N	\N
+1161	2	167	N	\N
+1162	2	168	N	\N
+1163	2	169	N	\N
+1164	2	170	N	\N
+1165	2	171	N	\N
+1166	2	172	N	\N
+1167	2	173	N	\N
+1168	2	174	N	\N
+1169	2	175	N	\N
+1170	2	176	N	\N
+1171	2	177	N	\N
+1172	2	178	N	\N
+1173	2	179	N	\N
+1174	2	180	N	\N
+1175	2	181	N	\N
+1176	2	182	N	\N
+1177	2	183	N	\N
+1178	2	184	N	\N
+1179	2	185	N	\N
+1180	2	186	N	\N
+1181	2	187	N	\N
+1182	2	188	N	\N
+1183	2	189	N	\N
+1184	2	190	N	\N
+1185	2	191	N	\N
+1186	2	192	N	\N
+1187	2	193	N	\N
+1188	2	194	N	\N
+1189	2	195	N	\N
+1190	2	196	N	\N
+1191	2	197	N	\N
+1192	2	198	N	\N
+1193	2	199	N	\N
+1194	2	200	N	\N
+1195	2	201	N	\N
+1196	2	202	N	\N
+1197	2	203	N	\N
+1198	2	204	N	\N
+1199	2	205	N	\N
+1200	2	206	N	\N
+1201	2	207	N	\N
+1202	2	208	N	\N
+1203	2	209	N	\N
+1204	2	210	N	\N
+1205	2	211	N	\N
+1206	2	212	N	\N
+1207	2	213	N	\N
+1208	2	214	N	\N
+1209	2	215	N	\N
+1210	2	216	N	\N
+1211	2	217	N	\N
+1212	2	218	N	\N
+1213	2	219	N	\N
+1214	2	220	N	\N
+1215	2	221	N	\N
+1216	2	222	N	\N
+1217	2	223	N	\N
+1218	2	224	N	\N
+1219	2	225	N	\N
+1220	2	226	N	\N
+1221	2	227	N	\N
+1222	2	228	N	\N
+1223	2	229	N	\N
+1224	2	230	N	\N
+1225	2	231	N	\N
+1226	2	232	N	\N
+1227	2	233	N	\N
+1228	2	234	N	\N
+1229	2	235	N	\N
+1230	2	236	N	\N
+1231	2	237	N	\N
+1232	2	238	N	\N
+1233	2	239	N	\N
+1234	2	240	N	\N
+1235	2	241	N	\N
+1236	2	242	N	\N
+1237	2	243	N	\N
+1238	2	244	N	\N
+1239	2	245	N	\N
+1240	2	246	N	\N
+1241	2	247	N	\N
+1242	2	248	N	\N
+1243	2	249	N	\N
+1244	2	250	N	\N
+1245	2	251	N	\N
+1246	2	252	N	\N
+1247	2	253	N	\N
+1248	2	254	N	\N
+1249	2	255	N	\N
+1250	2	256	N	\N
+1251	2	257	N	\N
+1252	2	258	N	\N
+1253	2	259	N	\N
+1254	2	260	N	\N
+1255	2	261	N	\N
+1256	2	262	N	\N
+1257	2	263	N	\N
+1258	2	264	N	\N
+1259	2	265	N	\N
+1260	2	266	N	\N
+1261	2	267	N	\N
+1262	2	268	N	\N
+1263	2	269	N	\N
+1264	2	270	N	\N
+1265	2	271	N	\N
+1266	2	272	N	\N
+1267	2	273	N	\N
+1268	2	274	N	\N
+1269	2	275	N	\N
+1270	2	276	N	\N
+1271	2	277	N	\N
+1272	2	278	N	\N
+1273	2	279	N	\N
+1274	2	280	N	\N
+1275	2	281	N	\N
+1276	2	282	N	\N
+1277	2	283	N	\N
+1278	2	284	N	\N
+1279	2	285	N	\N
+1280	2	286	N	\N
+1281	2	287	N	\N
+1282	2	288	N	\N
+1283	2	289	N	\N
+1284	2	290	N	\N
+1285	2	291	N	\N
+1286	2	292	N	\N
+1287	2	293	N	\N
+1288	2	294	N	\N
+1289	2	295	N	\N
+1290	2	296	N	\N
+1291	2	297	N	\N
+1292	2	298	N	\N
+1293	2	299	N	\N
+1294	2	300	N	\N
+1295	2	301	N	\N
+1296	2	302	N	\N
+1297	2	303	N	\N
+1298	2	304	N	\N
+1299	2	305	N	\N
+1300	2	306	N	\N
+1301	2	307	N	\N
+1302	2	308	N	\N
+1303	2	309	N	\N
+1304	2	310	N	\N
+1305	2	311	N	\N
+1306	2	312	N	\N
+1307	2	313	N	\N
+1308	2	314	N	\N
+1309	2	315	N	\N
+1310	2	316	N	\N
+1311	2	317	N	\N
+1312	2	318	N	\N
+1313	2	319	N	\N
+1314	2	320	N	\N
+1315	2	321	N	\N
+1316	2	322	N	\N
+1317	2	323	N	\N
+1318	2	324	N	\N
+1319	2	325	N	\N
+1320	2	326	N	\N
+1321	2	327	N	\N
+1322	2	328	N	\N
+1323	2	329	N	\N
+1324	2	330	N	\N
+1325	2	331	N	\N
+1326	2	332	N	\N
+1327	2	333	N	\N
+1328	2	334	N	\N
+1329	2	335	N	\N
+1330	2	336	N	\N
+1331	2	337	N	\N
+1332	2	338	N	\N
+1333	2	339	N	\N
+1334	2	340	N	\N
+1335	2	341	N	\N
+1336	2	342	N	\N
+1337	2	343	N	\N
+1338	2	344	N	\N
+1339	2	345	N	\N
+1340	2	346	N	\N
+1341	2	347	N	\N
+1342	2	348	N	\N
+1343	2	349	N	\N
+1344	2	350	N	\N
+1345	2	351	N	\N
+1346	2	352	N	\N
+1347	2	353	N	\N
+1348	2	354	N	\N
+1349	2	355	N	\N
+1350	2	356	N	\N
+1351	2	357	N	\N
+1352	2	358	N	\N
+1353	2	359	N	\N
+1354	2	360	N	\N
+1355	2	361	N	\N
+1356	2	362	N	\N
+1357	2	363	N	\N
+1358	2	364	N	\N
+1359	2	365	N	\N
+1360	2	366	N	\N
+1361	2	367	N	\N
+1362	2	368	N	\N
+1363	2	369	N	\N
+1364	2	370	N	\N
+1365	2	371	N	\N
+1366	2	372	N	\N
+1367	2	373	N	\N
+1368	2	374	N	\N
+1369	2	375	N	\N
+1370	2	376	N	\N
+1371	2	377	N	\N
+1372	2	378	N	\N
+1373	2	379	N	\N
+1374	2	380	N	\N
+1375	2	381	N	\N
+1376	2	382	N	\N
+1377	2	383	N	\N
+1378	2	384	N	\N
+1379	2	385	N	\N
+1380	2	386	N	\N
+1381	2	387	N	\N
+1382	2	388	N	\N
+1383	2	389	N	\N
+1384	2	390	N	\N
+1385	2	391	N	\N
+1386	2	392	N	\N
+1387	2	393	N	\N
+1388	2	394	N	\N
+1389	2	395	N	\N
+1390	2	396	N	\N
+1391	2	397	N	\N
+1392	2	398	N	\N
+1393	2	399	N	\N
+1394	2	400	N	\N
+1395	2	401	N	\N
+1396	2	402	N	\N
+1397	2	403	N	\N
+1398	2	404	N	\N
+1399	2	405	N	\N
+1400	2	406	N	\N
+1401	2	407	N	\N
+1402	2	408	N	\N
+1403	2	409	N	\N
+1404	2	410	N	\N
+1405	2	411	N	\N
+1406	2	412	N	\N
+1407	2	413	N	\N
+1408	2	414	N	\N
+1409	2	415	N	\N
+1410	2	416	N	\N
+1411	2	417	N	\N
+1412	2	418	N	\N
+1413	2	419	N	\N
+1414	2	420	N	\N
+1415	2	421	N	\N
+1416	2	422	N	\N
+1417	2	423	N	\N
+1418	2	424	N	\N
+1419	2	425	N	\N
+1420	2	426	N	\N
+1421	2	427	N	\N
+1422	2	428	N	\N
+1423	2	429	N	\N
+1424	2	430	N	\N
+1425	2	431	N	\N
+1426	2	432	N	\N
+1427	2	433	N	\N
+1428	2	434	N	\N
+1429	2	435	N	\N
+1430	2	436	N	\N
+1431	2	437	N	\N
+1432	2	438	N	\N
+1433	2	439	N	\N
+1434	2	440	N	\N
+1435	2	441	N	\N
+1436	2	442	N	\N
+1437	2	443	N	\N
+1438	2	444	N	\N
+1439	2	445	N	\N
+1440	2	446	N	\N
+1441	2	447	N	\N
+1442	2	448	N	\N
+1443	2	449	N	\N
+1444	2	450	N	\N
+1445	2	451	N	\N
+1446	2	452	N	\N
+1447	2	453	N	\N
+1448	2	454	N	\N
+1449	2	455	N	\N
+1450	2	456	N	\N
+1451	2	457	N	\N
+1452	2	458	N	\N
+1453	2	459	N	\N
+1454	2	460	N	\N
+1455	2	461	N	\N
+1456	2	462	N	\N
+1457	2	463	N	\N
+1458	2	464	N	\N
+1459	2	465	N	\N
+1460	2	466	N	\N
+1461	2	467	N	\N
+1462	2	468	N	\N
+1463	2	469	N	\N
+1464	2	470	N	\N
+1465	2	471	N	\N
+1466	2	472	N	\N
+1467	2	473	N	\N
+1468	2	474	N	\N
+1469	2	475	N	\N
+1470	2	476	N	\N
+1471	2	477	N	\N
+1472	2	478	N	\N
+1473	2	479	N	\N
+1474	2	480	N	\N
+1475	2	481	N	\N
+1476	2	482	N	\N
+1477	2	483	N	\N
+1478	2	484	N	\N
+1479	2	485	N	\N
+1480	2	486	N	\N
+1481	2	487	N	\N
+1482	2	488	N	\N
+1483	2	489	N	\N
+1484	2	490	N	\N
+1485	2	491	N	\N
+1486	2	492	N	\N
+1487	2	493	N	\N
+1488	2	494	N	\N
+1489	2	495	N	\N
+1490	2	496	N	\N
+1491	2	497	N	\N
+1492	2	498	N	\N
+1493	2	499	N	\N
+1494	2	500	N	\N
+1495	2	501	N	\N
+1496	2	502	N	\N
+1497	2	503	N	\N
+1498	2	504	N	\N
+1499	2	505	N	\N
+1500	2	506	N	\N
+1501	2	507	N	\N
+1502	2	508	N	\N
+1503	2	509	N	\N
+1504	2	510	N	\N
+1505	2	511	N	\N
+1506	2	512	N	\N
+1507	2	513	N	\N
+1508	2	514	N	\N
+1509	2	515	N	\N
+1510	2	516	N	\N
+1511	2	517	N	\N
+1512	2	518	N	\N
+1513	2	519	N	\N
+1514	2	520	N	\N
+1515	2	521	N	\N
+1516	2	522	N	\N
+1517	2	523	N	\N
+1518	2	524	N	\N
+1519	2	525	N	\N
+1520	2	526	N	\N
+1521	2	527	N	\N
+1522	2	528	N	\N
+1523	2	529	N	\N
+1524	2	530	N	\N
+1525	2	531	N	\N
+1526	2	532	N	\N
+1527	2	533	N	\N
+1528	2	534	N	\N
+1529	2	535	N	\N
+1530	2	536	N	\N
+1531	2	537	N	\N
+1532	2	538	N	\N
+1533	2	539	N	\N
+1534	2	540	N	\N
+1535	2	541	N	\N
+1536	2	542	N	\N
+1537	2	543	N	\N
+1538	2	544	N	\N
+1539	2	545	N	\N
+1540	2	546	N	\N
+1541	2	547	N	\N
+1542	2	548	N	\N
+1543	2	549	N	\N
+1544	2	550	N	\N
+1545	2	551	N	\N
+1546	2	552	N	\N
+1547	2	553	N	\N
+1548	2	554	N	\N
+1549	2	555	N	\N
+1550	2	556	N	\N
+1551	2	557	N	\N
+1552	2	558	N	\N
+1553	2	559	N	\N
+1554	2	560	N	\N
+1555	2	561	N	\N
+1556	2	562	N	\N
+1557	2	563	N	\N
+1558	2	564	N	\N
+1559	2	565	N	\N
+1560	2	566	N	\N
+1561	2	567	N	\N
+1562	2	568	N	\N
+1563	2	569	N	\N
+1564	2	570	N	\N
+1565	2	571	N	\N
+1566	2	572	N	\N
+1567	2	573	N	\N
+1568	2	574	N	\N
+1569	2	575	N	\N
+1570	2	576	N	\N
+1571	2	577	N	\N
+1572	2	578	N	\N
+1573	2	579	N	\N
+1574	2	580	N	\N
+1575	2	581	N	\N
+1576	2	582	N	\N
+1577	2	583	N	\N
+1578	2	584	N	\N
+1579	2	585	N	\N
+1580	2	586	N	\N
+1581	2	587	N	\N
+1582	2	588	N	\N
+1583	2	589	N	\N
+1584	2	590	N	\N
+1585	2	591	N	\N
+1586	2	592	N	\N
+1587	2	593	N	\N
+1588	2	594	N	\N
+1589	2	595	N	\N
+1590	2	596	N	\N
+1591	2	597	N	\N
+1592	2	598	N	\N
+1593	2	599	N	\N
+1594	2	600	N	\N
+1595	2	601	N	\N
+1596	2	602	N	\N
+1597	2	603	N	\N
+1598	2	604	N	\N
+1599	2	605	N	\N
+1600	2	606	N	\N
+1601	2	607	N	\N
+1602	2	608	N	\N
+1603	2	609	N	\N
+1604	2	610	N	\N
+1605	2	611	N	\N
+1606	2	612	N	\N
+1607	2	613	N	\N
+1608	2	614	N	\N
+1609	2	615	N	\N
+1610	2	616	N	\N
+1611	2	617	N	\N
+1612	2	618	N	\N
+1613	2	619	N	\N
+1614	2	620	N	\N
+1615	2	621	N	\N
+1616	2	622	N	\N
+1617	2	623	N	\N
+1618	2	624	N	\N
+1619	2	625	N	\N
+1620	2	626	N	\N
+1621	2	627	N	\N
+1622	2	628	N	\N
+1623	2	629	N	\N
+1624	2	630	N	\N
+1625	2	631	N	\N
+1626	2	632	N	\N
+1627	2	633	N	\N
+1628	2	634	N	\N
+1629	2	635	N	\N
+1630	2	636	N	\N
+1631	2	637	N	\N
+1632	2	638	N	\N
+1633	2	639	N	\N
+1634	2	640	N	\N
+1635	2	641	N	\N
+1636	2	642	N	\N
+1637	2	643	N	\N
+1638	2	644	N	\N
+1639	2	645	N	\N
+1640	2	646	N	\N
+1641	2	647	N	\N
+1642	2	648	N	\N
+1643	2	649	N	\N
+1644	2	650	N	\N
+1645	2	651	N	\N
+1646	2	652	N	\N
+1647	2	653	N	\N
+1648	2	654	N	\N
+1649	2	655	N	\N
+1650	2	656	N	\N
+1651	2	657	N	\N
+1652	2	658	N	\N
+1653	2	659	N	\N
+1654	2	660	N	\N
+1655	2	661	N	\N
+1656	2	662	N	\N
+1657	2	663	N	\N
+1658	2	664	N	\N
+1659	2	665	N	\N
+1660	2	666	N	\N
+1661	2	667	N	\N
+1662	2	668	N	\N
+1663	2	669	N	\N
+1664	2	670	N	\N
+1665	2	671	N	\N
+1666	2	672	N	\N
+1667	2	673	N	\N
+1668	2	674	N	\N
+1669	2	675	N	\N
+1670	2	676	N	\N
+1671	2	677	N	\N
+1672	2	678	N	\N
+1673	2	679	N	\N
+1674	2	680	N	\N
+1675	2	681	N	\N
+1676	2	682	N	\N
+1677	2	683	N	\N
+1678	2	684	N	\N
+1679	2	685	N	\N
+1680	2	686	N	\N
+1681	2	687	N	\N
+1682	2	688	N	\N
+1683	2	689	N	\N
+1684	2	690	N	\N
+1685	2	691	N	\N
+1686	2	692	N	\N
+1687	2	693	N	\N
+1688	2	694	N	\N
+1689	2	695	N	\N
+1690	2	696	N	\N
+1691	2	697	N	\N
+1692	2	698	N	\N
+1693	2	699	N	\N
+1694	2	700	N	\N
+1695	2	701	N	\N
+1696	2	702	N	\N
+1697	2	703	N	\N
+1698	2	704	N	\N
+1699	2	705	N	\N
+1700	2	706	N	\N
+1701	2	707	N	\N
+1702	2	708	N	\N
+1703	2	709	N	\N
+1704	2	710	N	\N
+1705	2	711	N	\N
+1706	2	712	N	\N
+1707	2	713	N	\N
+1708	2	714	N	\N
+1709	2	715	N	\N
+1710	2	716	N	\N
+1711	2	717	N	\N
+1712	2	718	N	\N
+1713	2	719	N	\N
+1714	2	720	N	\N
+1715	2	721	N	\N
+1716	2	722	N	\N
+1717	2	723	N	\N
+1718	2	724	N	\N
+1719	2	725	N	\N
+1720	2	726	N	\N
+1721	2	727	N	\N
+1722	2	728	N	\N
+1723	2	729	N	\N
+1724	2	730	N	\N
+1725	2	731	N	\N
+1726	2	732	N	\N
+1727	2	733	N	\N
+1728	2	734	N	\N
+1729	2	735	N	\N
+1730	2	736	N	\N
+1731	2	737	N	\N
+1732	2	738	N	\N
+1733	2	739	N	\N
+1734	2	740	N	\N
+1735	2	741	N	\N
+1736	2	742	N	\N
+1737	2	743	N	\N
+1738	2	744	N	\N
+1739	2	745	N	\N
+1740	2	746	N	\N
+1741	2	747	N	\N
+1742	2	748	N	\N
+1743	2	749	N	\N
+1744	2	750	N	\N
+1745	2	751	N	\N
+1746	2	752	N	\N
+1747	2	753	N	\N
+1748	2	754	N	\N
+1749	2	755	N	\N
+1750	2	756	N	\N
+1751	2	757	N	\N
+1752	2	758	N	\N
+1753	2	759	N	\N
+1754	2	760	N	\N
+1755	2	761	N	\N
+1756	2	762	N	\N
+1757	2	763	N	\N
+1758	2	764	N	\N
+1759	2	765	N	\N
+1760	2	766	N	\N
+1761	2	767	N	\N
+1762	2	768	N	\N
+1763	2	769	N	\N
+1764	2	770	N	\N
+1765	2	771	N	\N
+1766	2	772	N	\N
+1767	2	773	N	\N
+1768	2	774	N	\N
+1769	2	775	N	\N
+1770	2	776	N	\N
+1771	2	777	N	\N
+1772	2	778	N	\N
+1773	2	779	N	\N
+1774	2	780	N	\N
+1775	2	781	N	\N
+1776	2	782	N	\N
+1777	2	783	N	\N
+1778	2	784	N	\N
+1779	2	785	N	\N
+1780	2	786	N	\N
+1781	2	787	N	\N
+1782	2	788	N	\N
+1783	2	789	N	\N
+1784	2	790	N	\N
+1785	2	791	N	\N
+1786	2	792	N	\N
+1787	2	793	N	\N
+1788	2	794	N	\N
+1789	2	795	N	\N
+1790	2	796	N	\N
+1791	2	797	N	\N
+1792	2	798	N	\N
+1793	2	799	N	\N
+1794	2	800	N	\N
+1795	2	801	N	\N
+1796	2	802	N	\N
+1797	2	803	N	\N
+1798	2	804	N	\N
+1799	2	805	N	\N
+1800	2	806	N	\N
+1801	2	807	N	\N
+1802	2	808	N	\N
+1803	2	809	N	\N
+1804	2	810	N	\N
+1805	2	811	N	\N
+1806	2	812	N	\N
+1807	2	813	N	\N
+1808	2	814	N	\N
+1809	2	815	N	\N
+1810	2	816	N	\N
+1811	2	817	N	\N
+1812	2	818	N	\N
+1813	2	819	N	\N
+1814	2	820	N	\N
+1815	2	821	N	\N
+1816	2	822	N	\N
+1817	2	823	N	\N
+1818	2	824	N	\N
+1819	2	825	N	\N
+1820	2	826	N	\N
+1821	2	827	N	\N
+1822	2	828	N	\N
+1823	2	829	N	\N
+1824	2	830	N	\N
+1825	2	831	N	\N
+1826	2	832	N	\N
+1827	2	833	N	\N
+1828	2	834	N	\N
+1829	2	835	N	\N
+1830	2	836	N	\N
+1831	2	837	N	\N
+1832	2	838	N	\N
+1833	2	839	N	\N
+1834	2	840	N	\N
+1835	2	841	N	\N
+1836	2	842	N	\N
+1837	2	843	N	\N
+1838	2	844	N	\N
+1839	2	845	N	\N
+1840	2	846	N	\N
+1841	2	847	N	\N
+1842	2	848	N	\N
+1843	2	849	N	\N
+1844	2	850	N	\N
+1845	2	851	N	\N
+1846	2	852	N	\N
+1847	2	853	N	\N
+1848	2	854	N	\N
+1849	2	855	N	\N
+1850	2	856	N	\N
+1851	2	857	N	\N
+1852	2	858	N	\N
+1853	2	859	N	\N
+1854	2	860	N	\N
+1855	2	861	N	\N
+1856	2	862	N	\N
+1857	2	863	N	\N
+1858	2	864	N	\N
+1859	2	865	N	\N
+1860	2	866	N	\N
+1861	2	867	N	\N
+1862	2	868	N	\N
+1863	2	869	N	\N
+1864	2	870	N	\N
+1865	2	871	N	\N
+1866	2	872	N	\N
+1867	2	873	N	\N
+1868	2	874	N	\N
+1869	2	875	N	\N
+1870	2	876	N	\N
+1871	2	877	N	\N
+1872	2	878	N	\N
+1873	2	879	N	\N
+1874	2	880	N	\N
+1875	2	881	N	\N
+1876	2	882	N	\N
+1877	2	883	N	\N
+1878	2	884	N	\N
+1879	2	885	N	\N
+1880	2	886	N	\N
+1881	2	887	N	\N
+1882	2	888	N	\N
+1883	2	889	N	\N
+1884	2	890	N	\N
+1885	2	891	N	\N
+1886	2	892	N	\N
+1887	2	893	N	\N
+1888	2	894	N	\N
+1889	2	895	N	\N
+1890	2	896	N	\N
+1891	2	897	N	\N
+1892	2	898	N	\N
+1893	2	899	N	\N
+1894	2	900	N	\N
+1895	2	901	N	\N
+1896	2	902	N	\N
+1897	2	903	N	\N
+1898	2	904	N	\N
+1899	2	905	N	\N
+1900	2	906	N	\N
+1901	2	907	N	\N
+1902	2	908	N	\N
+1903	2	909	N	\N
+1904	2	910	N	\N
+1905	2	911	N	\N
+1906	2	912	N	\N
+1907	2	913	N	\N
+1908	2	914	N	\N
+1909	2	915	N	\N
+1910	2	916	N	\N
+1911	2	917	N	\N
+1912	2	918	N	\N
+1913	2	919	N	\N
+1914	2	920	N	\N
+1915	2	921	N	\N
+1916	2	922	N	\N
+1917	2	923	N	\N
+1918	2	924	N	\N
+1919	2	925	N	\N
+1920	2	926	N	\N
+1921	2	927	N	\N
+1922	2	928	N	\N
+1923	2	929	N	\N
+1924	2	930	N	\N
+1925	2	931	N	\N
+1926	2	932	N	\N
+1927	2	933	N	\N
+1928	2	934	N	\N
+1929	2	935	N	\N
+1930	2	936	N	\N
+1931	2	937	N	\N
+1932	2	938	N	\N
+1933	2	939	N	\N
+1934	2	940	N	\N
+1935	2	941	N	\N
+1936	2	942	N	\N
+1937	2	943	N	\N
+1938	2	944	N	\N
+1939	2	945	N	\N
+1940	2	946	N	\N
+1941	2	947	N	\N
+1942	2	948	N	\N
+1943	2	949	N	\N
+1944	2	950	N	\N
+1945	2	951	N	\N
+1946	2	952	N	\N
+1947	2	953	N	\N
+1948	2	954	N	\N
+1949	2	955	N	\N
+1950	2	956	N	\N
+1951	2	957	N	\N
+1952	2	958	N	\N
+1953	2	959	N	\N
+1954	2	960	N	\N
+1955	2	961	N	\N
+1956	2	962	N	\N
+1957	2	963	N	\N
+1958	2	964	N	\N
+1959	2	965	N	\N
+1960	2	966	N	\N
+1961	2	967	N	\N
+1962	2	968	N	\N
+1963	2	969	N	\N
+1964	2	970	N	\N
+1965	2	971	N	\N
+1966	2	972	N	\N
+1967	2	973	N	\N
+1968	2	974	N	\N
+1969	2	975	N	\N
+1970	2	976	N	\N
+1971	2	977	N	\N
+1972	2	978	N	\N
+1973	2	979	N	\N
+1974	2	980	N	\N
+1975	2	981	N	\N
+1976	2	982	N	\N
+1977	2	983	N	\N
+1978	2	984	N	\N
+1979	2	985	N	\N
+1980	2	986	N	\N
+1981	2	987	N	\N
+1982	2	988	N	\N
+1983	2	989	N	\N
+1984	2	990	N	\N
+1985	2	991	N	\N
+1986	2	992	N	\N
+1987	2	993	N	\N
+1988	2	994	N	\N
+115	1	116	S	2026-05-14 17:28:47.412764
+163	1	164	S	2026-05-14 17:28:47.931287
+595	1	597	S	2026-05-14 17:29:06.605097
+\.
+
+
+--
+-- Data for Name: album_novo; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.album_novo (id, nome, data_criacao, ativo) FROM stdin;
+1	Helena S. Provinciatti	2026-05-14 11:17:12.052718	S
+2	Lucas Gorla Provinciatti	2026-05-14 17:28:16.816895	S
+\.
+
+
+--
+-- Data for Name: categoria_figurinha; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.categoria_figurinha (id, nome) FROM stdin;
+1	FWC
+2	SELECAO
+3	COCA_COLA
+4	ESPECIAL
+\.
+
+
+--
+-- Data for Name: figurinha; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.figurinha (id, codigo, numero, descricao, categoria_id, selecao_id, rara, observacao, tipo) FROM stdin;
+10	FWC 10	10	FIFA WORLD CUP 2026	1	1	N	\N	FWC
+48	ESP 1	1	Espanha	2	30	N	\N	SELECAO
+20	MEX 1	1	México	2	2	N	\N	SELECAO
+21	RSA 1	1	África do Sul	2	3	N	\N	SELECAO
+22	KOR 1	1	Coréia do Sul	2	4	N	\N	SELECAO
+23	CZE 1	1	Rep. Tcheca	2	5	N	\N	SELECAO
+24	CAN 1	1	Canadá	2	6	N	\N	SELECAO
+25	BIH 1	1	Bósnia	2	7	N	\N	SELECAO
+26	QAT 1	1	Catar	2	8	N	\N	SELECAO
+27	SUI 1	1	Suiça	2	9	N	\N	SELECAO
+28	BRA 1	1	Brasil	2	10	N	\N	SELECAO
+29	MAR 1	1	Marrocos	2	11	N	\N	SELECAO
+30	HAI 1	1	Haiti	2	12	N	\N	SELECAO
+31	SCO 1	1	Escócia	2	13	N	\N	SELECAO
+32	USA 1	1	Estados Unidos	2	14	N	\N	SELECAO
+33	PAR 1	1	Paraguai	2	15	N	\N	SELECAO
+34	AUS 1	1	Austrália	2	16	N	\N	SELECAO
+35	TUR 1	1	Turquia	2	17	N	\N	SELECAO
+36	GER 1	1	Alemanha	2	18	N	\N	SELECAO
+37	CUW 1	1	Curaçao	2	19	N	\N	SELECAO
+38	CIV 1	1	Costa do Marfim	2	20	N	\N	SELECAO
+39	ECU 1	1	Equador	2	21	N	\N	SELECAO
+40	HOL 1	1	Holanda	2	22	N	\N	SELECAO
+41	JPN 1	1	Japão	2	23	N	\N	SELECAO
+42	SWE 1	1	Suécia	2	24	N	\N	SELECAO
+43	TUN 1	1	Tunísia	2	25	N	\N	SELECAO
+44	BEL 1	1	Bélgica	2	26	N	\N	SELECAO
+45	EGY 1	1	Egito	2	27	N	\N	SELECAO
+46	IRN 1	1	Irã	2	28	N	\N	SELECAO
+47	NZL 1	1	Nova Zelândia	2	29	N	\N	SELECAO
+49	CPV 1	1	Cabo Verde	2	31	N	\N	SELECAO
+50	KSA 1	1	Arábia Saudita	2	32	N	\N	SELECAO
+51	URU 1	1	Uruguai	2	33	N	\N	SELECAO
+52	FRA 1	1	França	2	34	N	\N	SELECAO
+53	SEN 1	1	Senegal	2	35	N	\N	SELECAO
+54	IRQ 1	1	Iraque	2	36	N	\N	SELECAO
+55	NOR 1	1	Noruega	2	37	N	\N	SELECAO
+56	ARG 1	1	Argentina	2	38	N	\N	SELECAO
+57	ALG 1	1	Argélia	2	39	N	\N	SELECAO
+58	AUT 1	1	Áustria	2	40	N	\N	SELECAO
+59	JOR 1	1	Jordânia	2	41	N	\N	SELECAO
+60	POR 1	1	Portugal	2	42	N	\N	SELECAO
+61	COD 1	1	Congo	2	43	N	\N	SELECAO
+62	UZB 1	1	Uzbequistão	2	44	N	\N	SELECAO
+63	COL 1	1	Colômbia	2	45	N	\N	SELECAO
+64	ENG 1	1	Inglaterra	2	46	N	\N	SELECAO
+65	CRO 1	1	Croácia	2	47	N	\N	SELECAO
+66	GHA 1	1	Gana	2	48	N	\N	SELECAO
+67	PAN 1	1	Panamá	2	49	N	\N	SELECAO
+68	MEX 2	2	México	2	2	N	\N	SELECAO
+69	RSA 2	2	África do Sul	2	3	N	\N	SELECAO
+70	KOR 2	2	Coréia do Sul	2	4	N	\N	SELECAO
+71	CZE 2	2	Rep. Tcheca	2	5	N	\N	SELECAO
+72	CAN 2	2	Canadá	2	6	N	\N	SELECAO
+73	BIH 2	2	Bósnia	2	7	N	\N	SELECAO
+74	QAT 2	2	Catar	2	8	N	\N	SELECAO
+75	SUI 2	2	Suiça	2	9	N	\N	SELECAO
+76	BRA 2	2	Brasil	2	10	N	\N	SELECAO
+77	MAR 2	2	Marrocos	2	11	N	\N	SELECAO
+78	HAI 2	2	Haiti	2	12	N	\N	SELECAO
+79	SCO 2	2	Escócia	2	13	N	\N	SELECAO
+80	USA 2	2	Estados Unidos	2	14	N	\N	SELECAO
+81	PAR 2	2	Paraguai	2	15	N	\N	SELECAO
+82	AUS 2	2	Austrália	2	16	N	\N	SELECAO
+83	TUR 2	2	Turquia	2	17	N	\N	SELECAO
+84	GER 2	2	Alemanha	2	18	N	\N	SELECAO
+85	CUW 2	2	Curaçao	2	19	N	\N	SELECAO
+86	CIV 2	2	Costa do Marfim	2	20	N	\N	SELECAO
+87	ECU 2	2	Equador	2	21	N	\N	SELECAO
+11	FWC 11	11	FIFA WORLD CUP 2026	1	1	N	\N	FWC
+12	FWC 12	12	FIFA WORLD CUP 2026	1	1	N	\N	FWC
+96	ESP 2	2	Espanha	2	30	N	\N	SELECAO
+144	ESP 3	3	Espanha	2	30	N	\N	SELECAO
+88	HOL 2	2	Holanda	2	22	N	\N	SELECAO
+89	JPN 2	2	Japão	2	23	N	\N	SELECAO
+90	SWE 2	2	Suécia	2	24	N	\N	SELECAO
+91	TUN 2	2	Tunísia	2	25	N	\N	SELECAO
+92	BEL 2	2	Bélgica	2	26	N	\N	SELECAO
+93	EGY 2	2	Egito	2	27	N	\N	SELECAO
+94	IRN 2	2	Irã	2	28	N	\N	SELECAO
+95	NZL 2	2	Nova Zelândia	2	29	N	\N	SELECAO
+97	CPV 2	2	Cabo Verde	2	31	N	\N	SELECAO
+98	KSA 2	2	Arábia Saudita	2	32	N	\N	SELECAO
+99	URU 2	2	Uruguai	2	33	N	\N	SELECAO
+100	FRA 2	2	França	2	34	N	\N	SELECAO
+101	SEN 2	2	Senegal	2	35	N	\N	SELECAO
+102	IRQ 2	2	Iraque	2	36	N	\N	SELECAO
+103	NOR 2	2	Noruega	2	37	N	\N	SELECAO
+104	ARG 2	2	Argentina	2	38	N	\N	SELECAO
+105	ALG 2	2	Argélia	2	39	N	\N	SELECAO
+106	AUT 2	2	Áustria	2	40	N	\N	SELECAO
+107	JOR 2	2	Jordânia	2	41	N	\N	SELECAO
+108	POR 2	2	Portugal	2	42	N	\N	SELECAO
+109	COD 2	2	Congo	2	43	N	\N	SELECAO
+110	UZB 2	2	Uzbequistão	2	44	N	\N	SELECAO
+111	COL 2	2	Colômbia	2	45	N	\N	SELECAO
+112	ENG 2	2	Inglaterra	2	46	N	\N	SELECAO
+113	CRO 2	2	Croácia	2	47	N	\N	SELECAO
+114	GHA 2	2	Gana	2	48	N	\N	SELECAO
+115	PAN 2	2	Panamá	2	49	N	\N	SELECAO
+116	MEX 3	3	México	2	2	N	\N	SELECAO
+117	RSA 3	3	África do Sul	2	3	N	\N	SELECAO
+118	KOR 3	3	Coréia do Sul	2	4	N	\N	SELECAO
+119	CZE 3	3	Rep. Tcheca	2	5	N	\N	SELECAO
+120	CAN 3	3	Canadá	2	6	N	\N	SELECAO
+121	BIH 3	3	Bósnia	2	7	N	\N	SELECAO
+122	QAT 3	3	Catar	2	8	N	\N	SELECAO
+123	SUI 3	3	Suiça	2	9	N	\N	SELECAO
+124	BRA 3	3	Brasil	2	10	N	\N	SELECAO
+125	MAR 3	3	Marrocos	2	11	N	\N	SELECAO
+126	HAI 3	3	Haiti	2	12	N	\N	SELECAO
+127	SCO 3	3	Escócia	2	13	N	\N	SELECAO
+128	USA 3	3	Estados Unidos	2	14	N	\N	SELECAO
+129	PAR 3	3	Paraguai	2	15	N	\N	SELECAO
+130	AUS 3	3	Austrália	2	16	N	\N	SELECAO
+131	TUR 3	3	Turquia	2	17	N	\N	SELECAO
+132	GER 3	3	Alemanha	2	18	N	\N	SELECAO
+133	CUW 3	3	Curaçao	2	19	N	\N	SELECAO
+134	CIV 3	3	Costa do Marfim	2	20	N	\N	SELECAO
+135	ECU 3	3	Equador	2	21	N	\N	SELECAO
+136	HOL 3	3	Holanda	2	22	N	\N	SELECAO
+137	JPN 3	3	Japão	2	23	N	\N	SELECAO
+138	SWE 3	3	Suécia	2	24	N	\N	SELECAO
+139	TUN 3	3	Tunísia	2	25	N	\N	SELECAO
+140	BEL 3	3	Bélgica	2	26	N	\N	SELECAO
+141	EGY 3	3	Egito	2	27	N	\N	SELECAO
+142	IRN 3	3	Irã	2	28	N	\N	SELECAO
+143	NZL 3	3	Nova Zelândia	2	29	N	\N	SELECAO
+145	CPV 3	3	Cabo Verde	2	31	N	\N	SELECAO
+146	KSA 3	3	Arábia Saudita	2	32	N	\N	SELECAO
+147	URU 3	3	Uruguai	2	33	N	\N	SELECAO
+148	FRA 3	3	França	2	34	N	\N	SELECAO
+149	SEN 3	3	Senegal	2	35	N	\N	SELECAO
+150	IRQ 3	3	Iraque	2	36	N	\N	SELECAO
+151	NOR 3	3	Noruega	2	37	N	\N	SELECAO
+152	ARG 3	3	Argentina	2	38	N	\N	SELECAO
+153	ALG 3	3	Argélia	2	39	N	\N	SELECAO
+154	AUT 3	3	Áustria	2	40	N	\N	SELECAO
+155	JOR 3	3	Jordânia	2	41	N	\N	SELECAO
+156	POR 3	3	Portugal	2	42	N	\N	SELECAO
+157	COD 3	3	Congo	2	43	N	\N	SELECAO
+158	UZB 3	3	Uzbequistão	2	44	N	\N	SELECAO
+159	COL 3	3	Colômbia	2	45	N	\N	SELECAO
+160	ENG 3	3	Inglaterra	2	46	N	\N	SELECAO
+161	CRO 3	3	Croácia	2	47	N	\N	SELECAO
+162	GHA 3	3	Gana	2	48	N	\N	SELECAO
+163	PAN 3	3	Panamá	2	49	N	\N	SELECAO
+164	MEX 4	4	México	2	2	N	\N	SELECAO
+13	FWC 13	13	FIFA WORLD CUP 2026	1	1	N	\N	FWC
+14	FWC 14	14	FIFA WORLD CUP 2026	1	1	N	\N	FWC
+15	FWC 15	15	FIFA WORLD CUP 2026	1	1	N	\N	FWC
+192	ESP 4	4	Espanha	2	30	N	\N	SELECAO
+240	ESP 5	5	Espanha	2	30	N	\N	SELECAO
+165	RSA 4	4	África do Sul	2	3	N	\N	SELECAO
+166	KOR 4	4	Coréia do Sul	2	4	N	\N	SELECAO
+167	CZE 4	4	Rep. Tcheca	2	5	N	\N	SELECAO
+168	CAN 4	4	Canadá	2	6	N	\N	SELECAO
+169	BIH 4	4	Bósnia	2	7	N	\N	SELECAO
+170	QAT 4	4	Catar	2	8	N	\N	SELECAO
+171	SUI 4	4	Suiça	2	9	N	\N	SELECAO
+172	BRA 4	4	Brasil	2	10	N	\N	SELECAO
+173	MAR 4	4	Marrocos	2	11	N	\N	SELECAO
+174	HAI 4	4	Haiti	2	12	N	\N	SELECAO
+175	SCO 4	4	Escócia	2	13	N	\N	SELECAO
+176	USA 4	4	Estados Unidos	2	14	N	\N	SELECAO
+177	PAR 4	4	Paraguai	2	15	N	\N	SELECAO
+178	AUS 4	4	Austrália	2	16	N	\N	SELECAO
+179	TUR 4	4	Turquia	2	17	N	\N	SELECAO
+180	GER 4	4	Alemanha	2	18	N	\N	SELECAO
+181	CUW 4	4	Curaçao	2	19	N	\N	SELECAO
+182	CIV 4	4	Costa do Marfim	2	20	N	\N	SELECAO
+183	ECU 4	4	Equador	2	21	N	\N	SELECAO
+184	HOL 4	4	Holanda	2	22	N	\N	SELECAO
+185	JPN 4	4	Japão	2	23	N	\N	SELECAO
+186	SWE 4	4	Suécia	2	24	N	\N	SELECAO
+187	TUN 4	4	Tunísia	2	25	N	\N	SELECAO
+188	BEL 4	4	Bélgica	2	26	N	\N	SELECAO
+189	EGY 4	4	Egito	2	27	N	\N	SELECAO
+190	IRN 4	4	Irã	2	28	N	\N	SELECAO
+191	NZL 4	4	Nova Zelândia	2	29	N	\N	SELECAO
+193	CPV 4	4	Cabo Verde	2	31	N	\N	SELECAO
+194	KSA 4	4	Arábia Saudita	2	32	N	\N	SELECAO
+195	URU 4	4	Uruguai	2	33	N	\N	SELECAO
+196	FRA 4	4	França	2	34	N	\N	SELECAO
+197	SEN 4	4	Senegal	2	35	N	\N	SELECAO
+198	IRQ 4	4	Iraque	2	36	N	\N	SELECAO
+199	NOR 4	4	Noruega	2	37	N	\N	SELECAO
+200	ARG 4	4	Argentina	2	38	N	\N	SELECAO
+201	ALG 4	4	Argélia	2	39	N	\N	SELECAO
+202	AUT 4	4	Áustria	2	40	N	\N	SELECAO
+203	JOR 4	4	Jordânia	2	41	N	\N	SELECAO
+204	POR 4	4	Portugal	2	42	N	\N	SELECAO
+205	COD 4	4	Congo	2	43	N	\N	SELECAO
+206	UZB 4	4	Uzbequistão	2	44	N	\N	SELECAO
+207	COL 4	4	Colômbia	2	45	N	\N	SELECAO
+208	ENG 4	4	Inglaterra	2	46	N	\N	SELECAO
+209	CRO 4	4	Croácia	2	47	N	\N	SELECAO
+210	GHA 4	4	Gana	2	48	N	\N	SELECAO
+211	PAN 4	4	Panamá	2	49	N	\N	SELECAO
+212	MEX 5	5	México	2	2	N	\N	SELECAO
+213	RSA 5	5	África do Sul	2	3	N	\N	SELECAO
+214	KOR 5	5	Coréia do Sul	2	4	N	\N	SELECAO
+215	CZE 5	5	Rep. Tcheca	2	5	N	\N	SELECAO
+216	CAN 5	5	Canadá	2	6	N	\N	SELECAO
+217	BIH 5	5	Bósnia	2	7	N	\N	SELECAO
+218	QAT 5	5	Catar	2	8	N	\N	SELECAO
+219	SUI 5	5	Suiça	2	9	N	\N	SELECAO
+220	BRA 5	5	Brasil	2	10	N	\N	SELECAO
+221	MAR 5	5	Marrocos	2	11	N	\N	SELECAO
+222	HAI 5	5	Haiti	2	12	N	\N	SELECAO
+223	SCO 5	5	Escócia	2	13	N	\N	SELECAO
+224	USA 5	5	Estados Unidos	2	14	N	\N	SELECAO
+225	PAR 5	5	Paraguai	2	15	N	\N	SELECAO
+226	AUS 5	5	Austrália	2	16	N	\N	SELECAO
+227	TUR 5	5	Turquia	2	17	N	\N	SELECAO
+228	GER 5	5	Alemanha	2	18	N	\N	SELECAO
+229	CUW 5	5	Curaçao	2	19	N	\N	SELECAO
+230	CIV 5	5	Costa do Marfim	2	20	N	\N	SELECAO
+231	ECU 5	5	Equador	2	21	N	\N	SELECAO
+232	HOL 5	5	Holanda	2	22	N	\N	SELECAO
+233	JPN 5	5	Japão	2	23	N	\N	SELECAO
+234	SWE 5	5	Suécia	2	24	N	\N	SELECAO
+235	TUN 5	5	Tunísia	2	25	N	\N	SELECAO
+236	BEL 5	5	Bélgica	2	26	N	\N	SELECAO
+237	EGY 5	5	Egito	2	27	N	\N	SELECAO
+238	IRN 5	5	Irã	2	28	N	\N	SELECAO
+239	NZL 5	5	Nova Zelândia	2	29	N	\N	SELECAO
+241	CPV 5	5	Cabo Verde	2	31	N	\N	SELECAO
+16	FWC 16	16	FIFA WORLD CUP 2026	1	1	N	\N	FWC
+17	FWC 17	17	FIFA WORLD CUP 2026	1	1	N	\N	FWC
+18	FWC 18	18	FIFA WORLD CUP 2026	1	1	N	\N	FWC
+288	ESP 6	6	Espanha	2	30	N	\N	SELECAO
+336	ESP 7	7	Espanha	2	30	N	\N	SELECAO
+242	KSA 5	5	Arábia Saudita	2	32	N	\N	SELECAO
+243	URU 5	5	Uruguai	2	33	N	\N	SELECAO
+244	FRA 5	5	França	2	34	N	\N	SELECAO
+245	SEN 5	5	Senegal	2	35	N	\N	SELECAO
+246	IRQ 5	5	Iraque	2	36	N	\N	SELECAO
+247	NOR 5	5	Noruega	2	37	N	\N	SELECAO
+248	ARG 5	5	Argentina	2	38	N	\N	SELECAO
+249	ALG 5	5	Argélia	2	39	N	\N	SELECAO
+250	AUT 5	5	Áustria	2	40	N	\N	SELECAO
+251	JOR 5	5	Jordânia	2	41	N	\N	SELECAO
+252	POR 5	5	Portugal	2	42	N	\N	SELECAO
+253	COD 5	5	Congo	2	43	N	\N	SELECAO
+254	UZB 5	5	Uzbequistão	2	44	N	\N	SELECAO
+255	COL 5	5	Colômbia	2	45	N	\N	SELECAO
+256	ENG 5	5	Inglaterra	2	46	N	\N	SELECAO
+257	CRO 5	5	Croácia	2	47	N	\N	SELECAO
+258	GHA 5	5	Gana	2	48	N	\N	SELECAO
+259	PAN 5	5	Panamá	2	49	N	\N	SELECAO
+260	MEX 6	6	México	2	2	N	\N	SELECAO
+261	RSA 6	6	África do Sul	2	3	N	\N	SELECAO
+262	KOR 6	6	Coréia do Sul	2	4	N	\N	SELECAO
+263	CZE 6	6	Rep. Tcheca	2	5	N	\N	SELECAO
+264	CAN 6	6	Canadá	2	6	N	\N	SELECAO
+265	BIH 6	6	Bósnia	2	7	N	\N	SELECAO
+266	QAT 6	6	Catar	2	8	N	\N	SELECAO
+267	SUI 6	6	Suiça	2	9	N	\N	SELECAO
+268	BRA 6	6	Brasil	2	10	N	\N	SELECAO
+269	MAR 6	6	Marrocos	2	11	N	\N	SELECAO
+270	HAI 6	6	Haiti	2	12	N	\N	SELECAO
+271	SCO 6	6	Escócia	2	13	N	\N	SELECAO
+272	USA 6	6	Estados Unidos	2	14	N	\N	SELECAO
+273	PAR 6	6	Paraguai	2	15	N	\N	SELECAO
+274	AUS 6	6	Austrália	2	16	N	\N	SELECAO
+275	TUR 6	6	Turquia	2	17	N	\N	SELECAO
+276	GER 6	6	Alemanha	2	18	N	\N	SELECAO
+277	CUW 6	6	Curaçao	2	19	N	\N	SELECAO
+278	CIV 6	6	Costa do Marfim	2	20	N	\N	SELECAO
+279	ECU 6	6	Equador	2	21	N	\N	SELECAO
+280	HOL 6	6	Holanda	2	22	N	\N	SELECAO
+281	JPN 6	6	Japão	2	23	N	\N	SELECAO
+282	SWE 6	6	Suécia	2	24	N	\N	SELECAO
+283	TUN 6	6	Tunísia	2	25	N	\N	SELECAO
+284	BEL 6	6	Bélgica	2	26	N	\N	SELECAO
+285	EGY 6	6	Egito	2	27	N	\N	SELECAO
+286	IRN 6	6	Irã	2	28	N	\N	SELECAO
+287	NZL 6	6	Nova Zelândia	2	29	N	\N	SELECAO
+289	CPV 6	6	Cabo Verde	2	31	N	\N	SELECAO
+290	KSA 6	6	Arábia Saudita	2	32	N	\N	SELECAO
+291	URU 6	6	Uruguai	2	33	N	\N	SELECAO
+292	FRA 6	6	França	2	34	N	\N	SELECAO
+293	SEN 6	6	Senegal	2	35	N	\N	SELECAO
+294	IRQ 6	6	Iraque	2	36	N	\N	SELECAO
+295	NOR 6	6	Noruega	2	37	N	\N	SELECAO
+296	ARG 6	6	Argentina	2	38	N	\N	SELECAO
+297	ALG 6	6	Argélia	2	39	N	\N	SELECAO
+298	AUT 6	6	Áustria	2	40	N	\N	SELECAO
+299	JOR 6	6	Jordânia	2	41	N	\N	SELECAO
+300	POR 6	6	Portugal	2	42	N	\N	SELECAO
+301	COD 6	6	Congo	2	43	N	\N	SELECAO
+302	UZB 6	6	Uzbequistão	2	44	N	\N	SELECAO
+303	COL 6	6	Colômbia	2	45	N	\N	SELECAO
+304	ENG 6	6	Inglaterra	2	46	N	\N	SELECAO
+305	CRO 6	6	Croácia	2	47	N	\N	SELECAO
+306	GHA 6	6	Gana	2	48	N	\N	SELECAO
+307	PAN 6	6	Panamá	2	49	N	\N	SELECAO
+308	MEX 7	7	México	2	2	N	\N	SELECAO
+309	RSA 7	7	África do Sul	2	3	N	\N	SELECAO
+310	KOR 7	7	Coréia do Sul	2	4	N	\N	SELECAO
+311	CZE 7	7	Rep. Tcheca	2	5	N	\N	SELECAO
+312	CAN 7	7	Canadá	2	6	N	\N	SELECAO
+313	BIH 7	7	Bósnia	2	7	N	\N	SELECAO
+314	QAT 7	7	Catar	2	8	N	\N	SELECAO
+315	SUI 7	7	Suiça	2	9	N	\N	SELECAO
+316	BRA 7	7	Brasil	2	10	N	\N	SELECAO
+317	MAR 7	7	Marrocos	2	11	N	\N	SELECAO
+19	FWC 19	19	FIFA WORLD CUP 2026	1	1	N	\N	FWC
+384	ESP 8	8	Espanha	2	30	N	\N	SELECAO
+432	ESP 9	9	Espanha	2	30	N	\N	SELECAO
+318	HAI 7	7	Haiti	2	12	N	\N	SELECAO
+319	SCO 7	7	Escócia	2	13	N	\N	SELECAO
+320	USA 7	7	Estados Unidos	2	14	N	\N	SELECAO
+321	PAR 7	7	Paraguai	2	15	N	\N	SELECAO
+322	AUS 7	7	Austrália	2	16	N	\N	SELECAO
+323	TUR 7	7	Turquia	2	17	N	\N	SELECAO
+324	GER 7	7	Alemanha	2	18	N	\N	SELECAO
+325	CUW 7	7	Curaçao	2	19	N	\N	SELECAO
+326	CIV 7	7	Costa do Marfim	2	20	N	\N	SELECAO
+327	ECU 7	7	Equador	2	21	N	\N	SELECAO
+328	HOL 7	7	Holanda	2	22	N	\N	SELECAO
+329	JPN 7	7	Japão	2	23	N	\N	SELECAO
+330	SWE 7	7	Suécia	2	24	N	\N	SELECAO
+331	TUN 7	7	Tunísia	2	25	N	\N	SELECAO
+332	BEL 7	7	Bélgica	2	26	N	\N	SELECAO
+333	EGY 7	7	Egito	2	27	N	\N	SELECAO
+334	IRN 7	7	Irã	2	28	N	\N	SELECAO
+335	NZL 7	7	Nova Zelândia	2	29	N	\N	SELECAO
+337	CPV 7	7	Cabo Verde	2	31	N	\N	SELECAO
+338	KSA 7	7	Arábia Saudita	2	32	N	\N	SELECAO
+339	URU 7	7	Uruguai	2	33	N	\N	SELECAO
+340	FRA 7	7	França	2	34	N	\N	SELECAO
+341	SEN 7	7	Senegal	2	35	N	\N	SELECAO
+342	IRQ 7	7	Iraque	2	36	N	\N	SELECAO
+343	NOR 7	7	Noruega	2	37	N	\N	SELECAO
+344	ARG 7	7	Argentina	2	38	N	\N	SELECAO
+345	ALG 7	7	Argélia	2	39	N	\N	SELECAO
+346	AUT 7	7	Áustria	2	40	N	\N	SELECAO
+347	JOR 7	7	Jordânia	2	41	N	\N	SELECAO
+348	POR 7	7	Portugal	2	42	N	\N	SELECAO
+349	COD 7	7	Congo	2	43	N	\N	SELECAO
+350	UZB 7	7	Uzbequistão	2	44	N	\N	SELECAO
+351	COL 7	7	Colômbia	2	45	N	\N	SELECAO
+352	ENG 7	7	Inglaterra	2	46	N	\N	SELECAO
+353	CRO 7	7	Croácia	2	47	N	\N	SELECAO
+354	GHA 7	7	Gana	2	48	N	\N	SELECAO
+355	PAN 7	7	Panamá	2	49	N	\N	SELECAO
+356	MEX 8	8	México	2	2	N	\N	SELECAO
+357	RSA 8	8	África do Sul	2	3	N	\N	SELECAO
+358	KOR 8	8	Coréia do Sul	2	4	N	\N	SELECAO
+359	CZE 8	8	Rep. Tcheca	2	5	N	\N	SELECAO
+360	CAN 8	8	Canadá	2	6	N	\N	SELECAO
+361	BIH 8	8	Bósnia	2	7	N	\N	SELECAO
+362	QAT 8	8	Catar	2	8	N	\N	SELECAO
+363	SUI 8	8	Suiça	2	9	N	\N	SELECAO
+364	BRA 8	8	Brasil	2	10	N	\N	SELECAO
+365	MAR 8	8	Marrocos	2	11	N	\N	SELECAO
+366	HAI 8	8	Haiti	2	12	N	\N	SELECAO
+367	SCO 8	8	Escócia	2	13	N	\N	SELECAO
+368	USA 8	8	Estados Unidos	2	14	N	\N	SELECAO
+369	PAR 8	8	Paraguai	2	15	N	\N	SELECAO
+370	AUS 8	8	Austrália	2	16	N	\N	SELECAO
+371	TUR 8	8	Turquia	2	17	N	\N	SELECAO
+372	GER 8	8	Alemanha	2	18	N	\N	SELECAO
+373	CUW 8	8	Curaçao	2	19	N	\N	SELECAO
+374	CIV 8	8	Costa do Marfim	2	20	N	\N	SELECAO
+375	ECU 8	8	Equador	2	21	N	\N	SELECAO
+376	HOL 8	8	Holanda	2	22	N	\N	SELECAO
+377	JPN 8	8	Japão	2	23	N	\N	SELECAO
+378	SWE 8	8	Suécia	2	24	N	\N	SELECAO
+379	TUN 8	8	Tunísia	2	25	N	\N	SELECAO
+380	BEL 8	8	Bélgica	2	26	N	\N	SELECAO
+381	EGY 8	8	Egito	2	27	N	\N	SELECAO
+382	IRN 8	8	Irã	2	28	N	\N	SELECAO
+383	NZL 8	8	Nova Zelândia	2	29	N	\N	SELECAO
+385	CPV 8	8	Cabo Verde	2	31	N	\N	SELECAO
+386	KSA 8	8	Arábia Saudita	2	32	N	\N	SELECAO
+387	URU 8	8	Uruguai	2	33	N	\N	SELECAO
+388	FRA 8	8	França	2	34	N	\N	SELECAO
+389	SEN 8	8	Senegal	2	35	N	\N	SELECAO
+390	IRQ 8	8	Iraque	2	36	N	\N	SELECAO
+391	NOR 8	8	Noruega	2	37	N	\N	SELECAO
+392	ARG 8	8	Argentina	2	38	N	\N	SELECAO
+393	ALG 8	8	Argélia	2	39	N	\N	SELECAO
+394	AUT 8	8	Áustria	2	40	N	\N	SELECAO
+480	ESP 10	10	Espanha	2	30	N	\N	SELECAO
+528	ESP 11	11	Espanha	2	30	N	\N	SELECAO
+395	JOR 8	8	Jordânia	2	41	N	\N	SELECAO
+396	POR 8	8	Portugal	2	42	N	\N	SELECAO
+397	COD 8	8	Congo	2	43	N	\N	SELECAO
+398	UZB 8	8	Uzbequistão	2	44	N	\N	SELECAO
+399	COL 8	8	Colômbia	2	45	N	\N	SELECAO
+400	ENG 8	8	Inglaterra	2	46	N	\N	SELECAO
+401	CRO 8	8	Croácia	2	47	N	\N	SELECAO
+402	GHA 8	8	Gana	2	48	N	\N	SELECAO
+403	PAN 8	8	Panamá	2	49	N	\N	SELECAO
+404	MEX 9	9	México	2	2	N	\N	SELECAO
+405	RSA 9	9	África do Sul	2	3	N	\N	SELECAO
+406	KOR 9	9	Coréia do Sul	2	4	N	\N	SELECAO
+407	CZE 9	9	Rep. Tcheca	2	5	N	\N	SELECAO
+408	CAN 9	9	Canadá	2	6	N	\N	SELECAO
+409	BIH 9	9	Bósnia	2	7	N	\N	SELECAO
+410	QAT 9	9	Catar	2	8	N	\N	SELECAO
+411	SUI 9	9	Suiça	2	9	N	\N	SELECAO
+412	BRA 9	9	Brasil	2	10	N	\N	SELECAO
+413	MAR 9	9	Marrocos	2	11	N	\N	SELECAO
+414	HAI 9	9	Haiti	2	12	N	\N	SELECAO
+415	SCO 9	9	Escócia	2	13	N	\N	SELECAO
+416	USA 9	9	Estados Unidos	2	14	N	\N	SELECAO
+417	PAR 9	9	Paraguai	2	15	N	\N	SELECAO
+418	AUS 9	9	Austrália	2	16	N	\N	SELECAO
+419	TUR 9	9	Turquia	2	17	N	\N	SELECAO
+420	GER 9	9	Alemanha	2	18	N	\N	SELECAO
+421	CUW 9	9	Curaçao	2	19	N	\N	SELECAO
+422	CIV 9	9	Costa do Marfim	2	20	N	\N	SELECAO
+423	ECU 9	9	Equador	2	21	N	\N	SELECAO
+424	HOL 9	9	Holanda	2	22	N	\N	SELECAO
+425	JPN 9	9	Japão	2	23	N	\N	SELECAO
+426	SWE 9	9	Suécia	2	24	N	\N	SELECAO
+427	TUN 9	9	Tunísia	2	25	N	\N	SELECAO
+428	BEL 9	9	Bélgica	2	26	N	\N	SELECAO
+429	EGY 9	9	Egito	2	27	N	\N	SELECAO
+430	IRN 9	9	Irã	2	28	N	\N	SELECAO
+431	NZL 9	9	Nova Zelândia	2	29	N	\N	SELECAO
+433	CPV 9	9	Cabo Verde	2	31	N	\N	SELECAO
+434	KSA 9	9	Arábia Saudita	2	32	N	\N	SELECAO
+435	URU 9	9	Uruguai	2	33	N	\N	SELECAO
+436	FRA 9	9	França	2	34	N	\N	SELECAO
+437	SEN 9	9	Senegal	2	35	N	\N	SELECAO
+438	IRQ 9	9	Iraque	2	36	N	\N	SELECAO
+439	NOR 9	9	Noruega	2	37	N	\N	SELECAO
+440	ARG 9	9	Argentina	2	38	N	\N	SELECAO
+441	ALG 9	9	Argélia	2	39	N	\N	SELECAO
+442	AUT 9	9	Áustria	2	40	N	\N	SELECAO
+443	JOR 9	9	Jordânia	2	41	N	\N	SELECAO
+444	POR 9	9	Portugal	2	42	N	\N	SELECAO
+445	COD 9	9	Congo	2	43	N	\N	SELECAO
+446	UZB 9	9	Uzbequistão	2	44	N	\N	SELECAO
+447	COL 9	9	Colômbia	2	45	N	\N	SELECAO
+448	ENG 9	9	Inglaterra	2	46	N	\N	SELECAO
+449	CRO 9	9	Croácia	2	47	N	\N	SELECAO
+450	GHA 9	9	Gana	2	48	N	\N	SELECAO
+451	PAN 9	9	Panamá	2	49	N	\N	SELECAO
+452	MEX 10	10	México	2	2	N	\N	SELECAO
+453	RSA 10	10	África do Sul	2	3	N	\N	SELECAO
+454	KOR 10	10	Coréia do Sul	2	4	N	\N	SELECAO
+455	CZE 10	10	Rep. Tcheca	2	5	N	\N	SELECAO
+456	CAN 10	10	Canadá	2	6	N	\N	SELECAO
+457	BIH 10	10	Bósnia	2	7	N	\N	SELECAO
+458	QAT 10	10	Catar	2	8	N	\N	SELECAO
+459	SUI 10	10	Suiça	2	9	N	\N	SELECAO
+460	BRA 10	10	Brasil	2	10	N	\N	SELECAO
+461	MAR 10	10	Marrocos	2	11	N	\N	SELECAO
+462	HAI 10	10	Haiti	2	12	N	\N	SELECAO
+463	SCO 10	10	Escócia	2	13	N	\N	SELECAO
+464	USA 10	10	Estados Unidos	2	14	N	\N	SELECAO
+465	PAR 10	10	Paraguai	2	15	N	\N	SELECAO
+466	AUS 10	10	Austrália	2	16	N	\N	SELECAO
+467	TUR 10	10	Turquia	2	17	N	\N	SELECAO
+468	GER 10	10	Alemanha	2	18	N	\N	SELECAO
+469	CUW 10	10	Curaçao	2	19	N	\N	SELECAO
+470	CIV 10	10	Costa do Marfim	2	20	N	\N	SELECAO
+576	ESP 12	12	Espanha	2	30	N	\N	SELECAO
+624	ESP 13	13	Espanha	2	30	N	\N	SELECAO
+471	ECU 10	10	Equador	2	21	N	\N	SELECAO
+472	HOL 10	10	Holanda	2	22	N	\N	SELECAO
+473	JPN 10	10	Japão	2	23	N	\N	SELECAO
+474	SWE 10	10	Suécia	2	24	N	\N	SELECAO
+475	TUN 10	10	Tunísia	2	25	N	\N	SELECAO
+476	BEL 10	10	Bélgica	2	26	N	\N	SELECAO
+477	EGY 10	10	Egito	2	27	N	\N	SELECAO
+478	IRN 10	10	Irã	2	28	N	\N	SELECAO
+479	NZL 10	10	Nova Zelândia	2	29	N	\N	SELECAO
+481	CPV 10	10	Cabo Verde	2	31	N	\N	SELECAO
+482	KSA 10	10	Arábia Saudita	2	32	N	\N	SELECAO
+483	URU 10	10	Uruguai	2	33	N	\N	SELECAO
+484	FRA 10	10	França	2	34	N	\N	SELECAO
+485	SEN 10	10	Senegal	2	35	N	\N	SELECAO
+486	IRQ 10	10	Iraque	2	36	N	\N	SELECAO
+487	NOR 10	10	Noruega	2	37	N	\N	SELECAO
+488	ARG 10	10	Argentina	2	38	N	\N	SELECAO
+489	ALG 10	10	Argélia	2	39	N	\N	SELECAO
+490	AUT 10	10	Áustria	2	40	N	\N	SELECAO
+491	JOR 10	10	Jordânia	2	41	N	\N	SELECAO
+492	POR 10	10	Portugal	2	42	N	\N	SELECAO
+493	COD 10	10	Congo	2	43	N	\N	SELECAO
+494	UZB 10	10	Uzbequistão	2	44	N	\N	SELECAO
+495	COL 10	10	Colômbia	2	45	N	\N	SELECAO
+496	ENG 10	10	Inglaterra	2	46	N	\N	SELECAO
+497	CRO 10	10	Croácia	2	47	N	\N	SELECAO
+498	GHA 10	10	Gana	2	48	N	\N	SELECAO
+499	PAN 10	10	Panamá	2	49	N	\N	SELECAO
+500	MEX 11	11	México	2	2	N	\N	SELECAO
+501	RSA 11	11	África do Sul	2	3	N	\N	SELECAO
+502	KOR 11	11	Coréia do Sul	2	4	N	\N	SELECAO
+503	CZE 11	11	Rep. Tcheca	2	5	N	\N	SELECAO
+504	CAN 11	11	Canadá	2	6	N	\N	SELECAO
+505	BIH 11	11	Bósnia	2	7	N	\N	SELECAO
+506	QAT 11	11	Catar	2	8	N	\N	SELECAO
+507	SUI 11	11	Suiça	2	9	N	\N	SELECAO
+508	BRA 11	11	Brasil	2	10	N	\N	SELECAO
+509	MAR 11	11	Marrocos	2	11	N	\N	SELECAO
+510	HAI 11	11	Haiti	2	12	N	\N	SELECAO
+511	SCO 11	11	Escócia	2	13	N	\N	SELECAO
+512	USA 11	11	Estados Unidos	2	14	N	\N	SELECAO
+513	PAR 11	11	Paraguai	2	15	N	\N	SELECAO
+514	AUS 11	11	Austrália	2	16	N	\N	SELECAO
+515	TUR 11	11	Turquia	2	17	N	\N	SELECAO
+516	GER 11	11	Alemanha	2	18	N	\N	SELECAO
+517	CUW 11	11	Curaçao	2	19	N	\N	SELECAO
+518	CIV 11	11	Costa do Marfim	2	20	N	\N	SELECAO
+519	ECU 11	11	Equador	2	21	N	\N	SELECAO
+520	HOL 11	11	Holanda	2	22	N	\N	SELECAO
+521	JPN 11	11	Japão	2	23	N	\N	SELECAO
+522	SWE 11	11	Suécia	2	24	N	\N	SELECAO
+523	TUN 11	11	Tunísia	2	25	N	\N	SELECAO
+524	BEL 11	11	Bélgica	2	26	N	\N	SELECAO
+525	EGY 11	11	Egito	2	27	N	\N	SELECAO
+526	IRN 11	11	Irã	2	28	N	\N	SELECAO
+527	NZL 11	11	Nova Zelândia	2	29	N	\N	SELECAO
+529	CPV 11	11	Cabo Verde	2	31	N	\N	SELECAO
+530	KSA 11	11	Arábia Saudita	2	32	N	\N	SELECAO
+531	URU 11	11	Uruguai	2	33	N	\N	SELECAO
+532	FRA 11	11	França	2	34	N	\N	SELECAO
+533	SEN 11	11	Senegal	2	35	N	\N	SELECAO
+534	IRQ 11	11	Iraque	2	36	N	\N	SELECAO
+535	NOR 11	11	Noruega	2	37	N	\N	SELECAO
+536	ARG 11	11	Argentina	2	38	N	\N	SELECAO
+537	ALG 11	11	Argélia	2	39	N	\N	SELECAO
+538	AUT 11	11	Áustria	2	40	N	\N	SELECAO
+539	JOR 11	11	Jordânia	2	41	N	\N	SELECAO
+540	POR 11	11	Portugal	2	42	N	\N	SELECAO
+541	COD 11	11	Congo	2	43	N	\N	SELECAO
+542	UZB 11	11	Uzbequistão	2	44	N	\N	SELECAO
+543	COL 11	11	Colômbia	2	45	N	\N	SELECAO
+544	ENG 11	11	Inglaterra	2	46	N	\N	SELECAO
+545	CRO 11	11	Croácia	2	47	N	\N	SELECAO
+546	GHA 11	11	Gana	2	48	N	\N	SELECAO
+547	PAN 11	11	Panamá	2	49	N	\N	SELECAO
+672	ESP 14	14	Espanha	2	30	N	\N	SELECAO
+720	ESP 15	15	Espanha	2	30	N	\N	SELECAO
+548	MEX 12	12	México	2	2	N	\N	SELECAO
+549	RSA 12	12	África do Sul	2	3	N	\N	SELECAO
+550	KOR 12	12	Coréia do Sul	2	4	N	\N	SELECAO
+551	CZE 12	12	Rep. Tcheca	2	5	N	\N	SELECAO
+552	CAN 12	12	Canadá	2	6	N	\N	SELECAO
+553	BIH 12	12	Bósnia	2	7	N	\N	SELECAO
+554	QAT 12	12	Catar	2	8	N	\N	SELECAO
+555	SUI 12	12	Suiça	2	9	N	\N	SELECAO
+556	BRA 12	12	Brasil	2	10	N	\N	SELECAO
+557	MAR 12	12	Marrocos	2	11	N	\N	SELECAO
+558	HAI 12	12	Haiti	2	12	N	\N	SELECAO
+559	SCO 12	12	Escócia	2	13	N	\N	SELECAO
+560	USA 12	12	Estados Unidos	2	14	N	\N	SELECAO
+561	PAR 12	12	Paraguai	2	15	N	\N	SELECAO
+562	AUS 12	12	Austrália	2	16	N	\N	SELECAO
+563	TUR 12	12	Turquia	2	17	N	\N	SELECAO
+564	GER 12	12	Alemanha	2	18	N	\N	SELECAO
+565	CUW 12	12	Curaçao	2	19	N	\N	SELECAO
+566	CIV 12	12	Costa do Marfim	2	20	N	\N	SELECAO
+567	ECU 12	12	Equador	2	21	N	\N	SELECAO
+568	HOL 12	12	Holanda	2	22	N	\N	SELECAO
+569	JPN 12	12	Japão	2	23	N	\N	SELECAO
+570	SWE 12	12	Suécia	2	24	N	\N	SELECAO
+571	TUN 12	12	Tunísia	2	25	N	\N	SELECAO
+572	BEL 12	12	Bélgica	2	26	N	\N	SELECAO
+573	EGY 12	12	Egito	2	27	N	\N	SELECAO
+574	IRN 12	12	Irã	2	28	N	\N	SELECAO
+575	NZL 12	12	Nova Zelândia	2	29	N	\N	SELECAO
+577	CPV 12	12	Cabo Verde	2	31	N	\N	SELECAO
+578	KSA 12	12	Arábia Saudita	2	32	N	\N	SELECAO
+579	URU 12	12	Uruguai	2	33	N	\N	SELECAO
+580	FRA 12	12	França	2	34	N	\N	SELECAO
+581	SEN 12	12	Senegal	2	35	N	\N	SELECAO
+582	IRQ 12	12	Iraque	2	36	N	\N	SELECAO
+583	NOR 12	12	Noruega	2	37	N	\N	SELECAO
+584	ARG 12	12	Argentina	2	38	N	\N	SELECAO
+585	ALG 12	12	Argélia	2	39	N	\N	SELECAO
+586	AUT 12	12	Áustria	2	40	N	\N	SELECAO
+587	JOR 12	12	Jordânia	2	41	N	\N	SELECAO
+588	POR 12	12	Portugal	2	42	N	\N	SELECAO
+589	COD 12	12	Congo	2	43	N	\N	SELECAO
+590	UZB 12	12	Uzbequistão	2	44	N	\N	SELECAO
+591	COL 12	12	Colômbia	2	45	N	\N	SELECAO
+592	ENG 12	12	Inglaterra	2	46	N	\N	SELECAO
+593	CRO 12	12	Croácia	2	47	N	\N	SELECAO
+594	GHA 12	12	Gana	2	48	N	\N	SELECAO
+595	PAN 12	12	Panamá	2	49	N	\N	SELECAO
+596	MEX 13	13	México	2	2	N	\N	SELECAO
+597	RSA 13	13	África do Sul	2	3	N	\N	SELECAO
+598	KOR 13	13	Coréia do Sul	2	4	N	\N	SELECAO
+599	CZE 13	13	Rep. Tcheca	2	5	N	\N	SELECAO
+600	CAN 13	13	Canadá	2	6	N	\N	SELECAO
+601	BIH 13	13	Bósnia	2	7	N	\N	SELECAO
+602	QAT 13	13	Catar	2	8	N	\N	SELECAO
+603	SUI 13	13	Suiça	2	9	N	\N	SELECAO
+604	BRA 13	13	Brasil	2	10	N	\N	SELECAO
+605	MAR 13	13	Marrocos	2	11	N	\N	SELECAO
+606	HAI 13	13	Haiti	2	12	N	\N	SELECAO
+607	SCO 13	13	Escócia	2	13	N	\N	SELECAO
+608	USA 13	13	Estados Unidos	2	14	N	\N	SELECAO
+609	PAR 13	13	Paraguai	2	15	N	\N	SELECAO
+610	AUS 13	13	Austrália	2	16	N	\N	SELECAO
+611	TUR 13	13	Turquia	2	17	N	\N	SELECAO
+612	GER 13	13	Alemanha	2	18	N	\N	SELECAO
+613	CUW 13	13	Curaçao	2	19	N	\N	SELECAO
+614	CIV 13	13	Costa do Marfim	2	20	N	\N	SELECAO
+615	ECU 13	13	Equador	2	21	N	\N	SELECAO
+616	HOL 13	13	Holanda	2	22	N	\N	SELECAO
+617	JPN 13	13	Japão	2	23	N	\N	SELECAO
+618	SWE 13	13	Suécia	2	24	N	\N	SELECAO
+619	TUN 13	13	Tunísia	2	25	N	\N	SELECAO
+620	BEL 13	13	Bélgica	2	26	N	\N	SELECAO
+621	EGY 13	13	Egito	2	27	N	\N	SELECAO
+622	IRN 13	13	Irã	2	28	N	\N	SELECAO
+623	NZL 13	13	Nova Zelândia	2	29	N	\N	SELECAO
+768	ESP 16	16	Espanha	2	30	N	\N	SELECAO
+816	ESP 17	17	Espanha	2	30	N	\N	SELECAO
+625	CPV 13	13	Cabo Verde	2	31	N	\N	SELECAO
+626	KSA 13	13	Arábia Saudita	2	32	N	\N	SELECAO
+627	URU 13	13	Uruguai	2	33	N	\N	SELECAO
+628	FRA 13	13	França	2	34	N	\N	SELECAO
+629	SEN 13	13	Senegal	2	35	N	\N	SELECAO
+630	IRQ 13	13	Iraque	2	36	N	\N	SELECAO
+631	NOR 13	13	Noruega	2	37	N	\N	SELECAO
+632	ARG 13	13	Argentina	2	38	N	\N	SELECAO
+633	ALG 13	13	Argélia	2	39	N	\N	SELECAO
+634	AUT 13	13	Áustria	2	40	N	\N	SELECAO
+635	JOR 13	13	Jordânia	2	41	N	\N	SELECAO
+636	POR 13	13	Portugal	2	42	N	\N	SELECAO
+637	COD 13	13	Congo	2	43	N	\N	SELECAO
+638	UZB 13	13	Uzbequistão	2	44	N	\N	SELECAO
+639	COL 13	13	Colômbia	2	45	N	\N	SELECAO
+640	ENG 13	13	Inglaterra	2	46	N	\N	SELECAO
+641	CRO 13	13	Croácia	2	47	N	\N	SELECAO
+642	GHA 13	13	Gana	2	48	N	\N	SELECAO
+643	PAN 13	13	Panamá	2	49	N	\N	SELECAO
+644	MEX 14	14	México	2	2	N	\N	SELECAO
+645	RSA 14	14	África do Sul	2	3	N	\N	SELECAO
+646	KOR 14	14	Coréia do Sul	2	4	N	\N	SELECAO
+647	CZE 14	14	Rep. Tcheca	2	5	N	\N	SELECAO
+648	CAN 14	14	Canadá	2	6	N	\N	SELECAO
+649	BIH 14	14	Bósnia	2	7	N	\N	SELECAO
+650	QAT 14	14	Catar	2	8	N	\N	SELECAO
+651	SUI 14	14	Suiça	2	9	N	\N	SELECAO
+652	BRA 14	14	Brasil	2	10	N	\N	SELECAO
+653	MAR 14	14	Marrocos	2	11	N	\N	SELECAO
+654	HAI 14	14	Haiti	2	12	N	\N	SELECAO
+655	SCO 14	14	Escócia	2	13	N	\N	SELECAO
+656	USA 14	14	Estados Unidos	2	14	N	\N	SELECAO
+657	PAR 14	14	Paraguai	2	15	N	\N	SELECAO
+658	AUS 14	14	Austrália	2	16	N	\N	SELECAO
+659	TUR 14	14	Turquia	2	17	N	\N	SELECAO
+660	GER 14	14	Alemanha	2	18	N	\N	SELECAO
+661	CUW 14	14	Curaçao	2	19	N	\N	SELECAO
+662	CIV 14	14	Costa do Marfim	2	20	N	\N	SELECAO
+663	ECU 14	14	Equador	2	21	N	\N	SELECAO
+664	HOL 14	14	Holanda	2	22	N	\N	SELECAO
+665	JPN 14	14	Japão	2	23	N	\N	SELECAO
+666	SWE 14	14	Suécia	2	24	N	\N	SELECAO
+667	TUN 14	14	Tunísia	2	25	N	\N	SELECAO
+668	BEL 14	14	Bélgica	2	26	N	\N	SELECAO
+669	EGY 14	14	Egito	2	27	N	\N	SELECAO
+670	IRN 14	14	Irã	2	28	N	\N	SELECAO
+671	NZL 14	14	Nova Zelândia	2	29	N	\N	SELECAO
+673	CPV 14	14	Cabo Verde	2	31	N	\N	SELECAO
+674	KSA 14	14	Arábia Saudita	2	32	N	\N	SELECAO
+675	URU 14	14	Uruguai	2	33	N	\N	SELECAO
+676	FRA 14	14	França	2	34	N	\N	SELECAO
+677	SEN 14	14	Senegal	2	35	N	\N	SELECAO
+678	IRQ 14	14	Iraque	2	36	N	\N	SELECAO
+679	NOR 14	14	Noruega	2	37	N	\N	SELECAO
+680	ARG 14	14	Argentina	2	38	N	\N	SELECAO
+681	ALG 14	14	Argélia	2	39	N	\N	SELECAO
+682	AUT 14	14	Áustria	2	40	N	\N	SELECAO
+683	JOR 14	14	Jordânia	2	41	N	\N	SELECAO
+684	POR 14	14	Portugal	2	42	N	\N	SELECAO
+685	COD 14	14	Congo	2	43	N	\N	SELECAO
+686	UZB 14	14	Uzbequistão	2	44	N	\N	SELECAO
+687	COL 14	14	Colômbia	2	45	N	\N	SELECAO
+688	ENG 14	14	Inglaterra	2	46	N	\N	SELECAO
+689	CRO 14	14	Croácia	2	47	N	\N	SELECAO
+690	GHA 14	14	Gana	2	48	N	\N	SELECAO
+691	PAN 14	14	Panamá	2	49	N	\N	SELECAO
+692	MEX 15	15	México	2	2	N	\N	SELECAO
+693	RSA 15	15	África do Sul	2	3	N	\N	SELECAO
+694	KOR 15	15	Coréia do Sul	2	4	N	\N	SELECAO
+695	CZE 15	15	Rep. Tcheca	2	5	N	\N	SELECAO
+696	CAN 15	15	Canadá	2	6	N	\N	SELECAO
+697	BIH 15	15	Bósnia	2	7	N	\N	SELECAO
+698	QAT 15	15	Catar	2	8	N	\N	SELECAO
+699	SUI 15	15	Suiça	2	9	N	\N	SELECAO
+700	BRA 15	15	Brasil	2	10	N	\N	SELECAO
+864	ESP 18	18	Espanha	2	30	N	\N	SELECAO
+912	ESP 19	19	Espanha	2	30	N	\N	SELECAO
+701	MAR 15	15	Marrocos	2	11	N	\N	SELECAO
+702	HAI 15	15	Haiti	2	12	N	\N	SELECAO
+703	SCO 15	15	Escócia	2	13	N	\N	SELECAO
+704	USA 15	15	Estados Unidos	2	14	N	\N	SELECAO
+705	PAR 15	15	Paraguai	2	15	N	\N	SELECAO
+706	AUS 15	15	Austrália	2	16	N	\N	SELECAO
+707	TUR 15	15	Turquia	2	17	N	\N	SELECAO
+708	GER 15	15	Alemanha	2	18	N	\N	SELECAO
+709	CUW 15	15	Curaçao	2	19	N	\N	SELECAO
+710	CIV 15	15	Costa do Marfim	2	20	N	\N	SELECAO
+711	ECU 15	15	Equador	2	21	N	\N	SELECAO
+712	HOL 15	15	Holanda	2	22	N	\N	SELECAO
+713	JPN 15	15	Japão	2	23	N	\N	SELECAO
+714	SWE 15	15	Suécia	2	24	N	\N	SELECAO
+715	TUN 15	15	Tunísia	2	25	N	\N	SELECAO
+716	BEL 15	15	Bélgica	2	26	N	\N	SELECAO
+717	EGY 15	15	Egito	2	27	N	\N	SELECAO
+718	IRN 15	15	Irã	2	28	N	\N	SELECAO
+719	NZL 15	15	Nova Zelândia	2	29	N	\N	SELECAO
+721	CPV 15	15	Cabo Verde	2	31	N	\N	SELECAO
+722	KSA 15	15	Arábia Saudita	2	32	N	\N	SELECAO
+723	URU 15	15	Uruguai	2	33	N	\N	SELECAO
+724	FRA 15	15	França	2	34	N	\N	SELECAO
+725	SEN 15	15	Senegal	2	35	N	\N	SELECAO
+726	IRQ 15	15	Iraque	2	36	N	\N	SELECAO
+727	NOR 15	15	Noruega	2	37	N	\N	SELECAO
+728	ARG 15	15	Argentina	2	38	N	\N	SELECAO
+729	ALG 15	15	Argélia	2	39	N	\N	SELECAO
+730	AUT 15	15	Áustria	2	40	N	\N	SELECAO
+731	JOR 15	15	Jordânia	2	41	N	\N	SELECAO
+732	POR 15	15	Portugal	2	42	N	\N	SELECAO
+733	COD 15	15	Congo	2	43	N	\N	SELECAO
+734	UZB 15	15	Uzbequistão	2	44	N	\N	SELECAO
+735	COL 15	15	Colômbia	2	45	N	\N	SELECAO
+736	ENG 15	15	Inglaterra	2	46	N	\N	SELECAO
+737	CRO 15	15	Croácia	2	47	N	\N	SELECAO
+738	GHA 15	15	Gana	2	48	N	\N	SELECAO
+739	PAN 15	15	Panamá	2	49	N	\N	SELECAO
+740	MEX 16	16	México	2	2	N	\N	SELECAO
+741	RSA 16	16	África do Sul	2	3	N	\N	SELECAO
+742	KOR 16	16	Coréia do Sul	2	4	N	\N	SELECAO
+743	CZE 16	16	Rep. Tcheca	2	5	N	\N	SELECAO
+744	CAN 16	16	Canadá	2	6	N	\N	SELECAO
+745	BIH 16	16	Bósnia	2	7	N	\N	SELECAO
+746	QAT 16	16	Catar	2	8	N	\N	SELECAO
+747	SUI 16	16	Suiça	2	9	N	\N	SELECAO
+748	BRA 16	16	Brasil	2	10	N	\N	SELECAO
+749	MAR 16	16	Marrocos	2	11	N	\N	SELECAO
+750	HAI 16	16	Haiti	2	12	N	\N	SELECAO
+751	SCO 16	16	Escócia	2	13	N	\N	SELECAO
+752	USA 16	16	Estados Unidos	2	14	N	\N	SELECAO
+753	PAR 16	16	Paraguai	2	15	N	\N	SELECAO
+754	AUS 16	16	Austrália	2	16	N	\N	SELECAO
+755	TUR 16	16	Turquia	2	17	N	\N	SELECAO
+756	GER 16	16	Alemanha	2	18	N	\N	SELECAO
+757	CUW 16	16	Curaçao	2	19	N	\N	SELECAO
+758	CIV 16	16	Costa do Marfim	2	20	N	\N	SELECAO
+759	ECU 16	16	Equador	2	21	N	\N	SELECAO
+760	HOL 16	16	Holanda	2	22	N	\N	SELECAO
+761	JPN 16	16	Japão	2	23	N	\N	SELECAO
+762	SWE 16	16	Suécia	2	24	N	\N	SELECAO
+763	TUN 16	16	Tunísia	2	25	N	\N	SELECAO
+764	BEL 16	16	Bélgica	2	26	N	\N	SELECAO
+765	EGY 16	16	Egito	2	27	N	\N	SELECAO
+766	IRN 16	16	Irã	2	28	N	\N	SELECAO
+767	NZL 16	16	Nova Zelândia	2	29	N	\N	SELECAO
+769	CPV 16	16	Cabo Verde	2	31	N	\N	SELECAO
+770	KSA 16	16	Arábia Saudita	2	32	N	\N	SELECAO
+771	URU 16	16	Uruguai	2	33	N	\N	SELECAO
+772	FRA 16	16	França	2	34	N	\N	SELECAO
+773	SEN 16	16	Senegal	2	35	N	\N	SELECAO
+774	IRQ 16	16	Iraque	2	36	N	\N	SELECAO
+775	NOR 16	16	Noruega	2	37	N	\N	SELECAO
+776	ARG 16	16	Argentina	2	38	N	\N	SELECAO
+777	ALG 16	16	Argélia	2	39	N	\N	SELECAO
+980	CC1	1	Coca-Cola	3	50	N	\N	COCA_COLA
+981	CC2	2	Coca-Cola	3	50	N	\N	COCA_COLA
+982	CC3	3	Coca-Cola	3	50	N	\N	COCA_COLA
+983	CC4	4	Coca-Cola	3	50	N	\N	COCA_COLA
+984	CC5	5	Coca-Cola	3	50	N	\N	COCA_COLA
+985	CC6	6	Coca-Cola	3	50	N	\N	COCA_COLA
+986	CC7	7	Coca-Cola	3	50	N	\N	COCA_COLA
+987	CC8	8	Coca-Cola	3	50	N	\N	COCA_COLA
+988	CC9	9	Coca-Cola	3	50	N	\N	COCA_COLA
+989	CC10	10	Coca-Cola	3	50	N	\N	COCA_COLA
+990	CC11	11	Coca-Cola	3	50	N	\N	COCA_COLA
+991	CC12	12	Coca-Cola	3	50	N	\N	COCA_COLA
+992	CC13	13	Coca-Cola	3	50	N	\N	COCA_COLA
+993	CC14	14	Coca-Cola	3	50	N	\N	COCA_COLA
+1	FWC 1	1	FIFA WORLD CUP 2026	1	1	N	\N	FWC
+960	ESP 20	20	Espanha	2	30	N	\N	SELECAO
+2	FWC 2	2	FIFA WORLD CUP 2026	1	1	N	\N	FWC
+3	FWC 3	3	FIFA WORLD CUP 2026	1	1	N	\N	FWC
+4	FWC 4	4	FIFA WORLD CUP 2026	1	1	N	\N	FWC
+5	FWC 5	5	FIFA WORLD CUP 2026	1	1	N	\N	FWC
+6	FWC 6	6	FIFA WORLD CUP 2026	1	1	N	\N	FWC
+7	FWC 7	7	FIFA WORLD CUP 2026	1	1	N	\N	FWC
+8	FWC 8	8	FIFA WORLD CUP 2026	1	1	N	\N	FWC
+9	FWC 9	9	FIFA WORLD CUP 2026	1	1	N	\N	FWC
+778	AUT 16	16	Áustria	2	40	N	\N	SELECAO
+779	JOR 16	16	Jordânia	2	41	N	\N	SELECAO
+780	POR 16	16	Portugal	2	42	N	\N	SELECAO
+781	COD 16	16	Congo	2	43	N	\N	SELECAO
+782	UZB 16	16	Uzbequistão	2	44	N	\N	SELECAO
+783	COL 16	16	Colômbia	2	45	N	\N	SELECAO
+784	ENG 16	16	Inglaterra	2	46	N	\N	SELECAO
+785	CRO 16	16	Croácia	2	47	N	\N	SELECAO
+786	GHA 16	16	Gana	2	48	N	\N	SELECAO
+787	PAN 16	16	Panamá	2	49	N	\N	SELECAO
+788	MEX 17	17	México	2	2	N	\N	SELECAO
+789	RSA 17	17	África do Sul	2	3	N	\N	SELECAO
+790	KOR 17	17	Coréia do Sul	2	4	N	\N	SELECAO
+791	CZE 17	17	Rep. Tcheca	2	5	N	\N	SELECAO
+792	CAN 17	17	Canadá	2	6	N	\N	SELECAO
+793	BIH 17	17	Bósnia	2	7	N	\N	SELECAO
+794	QAT 17	17	Catar	2	8	N	\N	SELECAO
+795	SUI 17	17	Suiça	2	9	N	\N	SELECAO
+796	BRA 17	17	Brasil	2	10	N	\N	SELECAO
+797	MAR 17	17	Marrocos	2	11	N	\N	SELECAO
+798	HAI 17	17	Haiti	2	12	N	\N	SELECAO
+799	SCO 17	17	Escócia	2	13	N	\N	SELECAO
+800	USA 17	17	Estados Unidos	2	14	N	\N	SELECAO
+801	PAR 17	17	Paraguai	2	15	N	\N	SELECAO
+802	AUS 17	17	Austrália	2	16	N	\N	SELECAO
+803	TUR 17	17	Turquia	2	17	N	\N	SELECAO
+804	GER 17	17	Alemanha	2	18	N	\N	SELECAO
+805	CUW 17	17	Curaçao	2	19	N	\N	SELECAO
+806	CIV 17	17	Costa do Marfim	2	20	N	\N	SELECAO
+807	ECU 17	17	Equador	2	21	N	\N	SELECAO
+808	HOL 17	17	Holanda	2	22	N	\N	SELECAO
+809	JPN 17	17	Japão	2	23	N	\N	SELECAO
+810	SWE 17	17	Suécia	2	24	N	\N	SELECAO
+811	TUN 17	17	Tunísia	2	25	N	\N	SELECAO
+812	BEL 17	17	Bélgica	2	26	N	\N	SELECAO
+813	EGY 17	17	Egito	2	27	N	\N	SELECAO
+814	IRN 17	17	Irã	2	28	N	\N	SELECAO
+815	NZL 17	17	Nova Zelândia	2	29	N	\N	SELECAO
+817	CPV 17	17	Cabo Verde	2	31	N	\N	SELECAO
+818	KSA 17	17	Arábia Saudita	2	32	N	\N	SELECAO
+819	URU 17	17	Uruguai	2	33	N	\N	SELECAO
+820	FRA 17	17	França	2	34	N	\N	SELECAO
+821	SEN 17	17	Senegal	2	35	N	\N	SELECAO
+822	IRQ 17	17	Iraque	2	36	N	\N	SELECAO
+823	NOR 17	17	Noruega	2	37	N	\N	SELECAO
+824	ARG 17	17	Argentina	2	38	N	\N	SELECAO
+825	ALG 17	17	Argélia	2	39	N	\N	SELECAO
+826	AUT 17	17	Áustria	2	40	N	\N	SELECAO
+827	JOR 17	17	Jordânia	2	41	N	\N	SELECAO
+828	POR 17	17	Portugal	2	42	N	\N	SELECAO
+829	COD 17	17	Congo	2	43	N	\N	SELECAO
+830	UZB 17	17	Uzbequistão	2	44	N	\N	SELECAO
+831	COL 17	17	Colômbia	2	45	N	\N	SELECAO
+832	ENG 17	17	Inglaterra	2	46	N	\N	SELECAO
+833	CRO 17	17	Croácia	2	47	N	\N	SELECAO
+834	GHA 17	17	Gana	2	48	N	\N	SELECAO
+835	PAN 17	17	Panamá	2	49	N	\N	SELECAO
+836	MEX 18	18	México	2	2	N	\N	SELECAO
+837	RSA 18	18	África do Sul	2	3	N	\N	SELECAO
+838	KOR 18	18	Coréia do Sul	2	4	N	\N	SELECAO
+839	CZE 18	18	Rep. Tcheca	2	5	N	\N	SELECAO
+840	CAN 18	18	Canadá	2	6	N	\N	SELECAO
+841	BIH 18	18	Bósnia	2	7	N	\N	SELECAO
+842	QAT 18	18	Catar	2	8	N	\N	SELECAO
+843	SUI 18	18	Suiça	2	9	N	\N	SELECAO
+844	BRA 18	18	Brasil	2	10	N	\N	SELECAO
+845	MAR 18	18	Marrocos	2	11	N	\N	SELECAO
+846	HAI 18	18	Haiti	2	12	N	\N	SELECAO
+847	SCO 18	18	Escócia	2	13	N	\N	SELECAO
+848	USA 18	18	Estados Unidos	2	14	N	\N	SELECAO
+849	PAR 18	18	Paraguai	2	15	N	\N	SELECAO
+850	AUS 18	18	Austrália	2	16	N	\N	SELECAO
+851	TUR 18	18	Turquia	2	17	N	\N	SELECAO
+852	GER 18	18	Alemanha	2	18	N	\N	SELECAO
+853	CUW 18	18	Curaçao	2	19	N	\N	SELECAO
+854	CIV 18	18	Costa do Marfim	2	20	N	\N	SELECAO
+855	ECU 18	18	Equador	2	21	N	\N	SELECAO
+856	HOL 18	18	Holanda	2	22	N	\N	SELECAO
+857	JPN 18	18	Japão	2	23	N	\N	SELECAO
+858	SWE 18	18	Suécia	2	24	N	\N	SELECAO
+859	TUN 18	18	Tunísia	2	25	N	\N	SELECAO
+860	BEL 18	18	Bélgica	2	26	N	\N	SELECAO
+861	EGY 18	18	Egito	2	27	N	\N	SELECAO
+862	IRN 18	18	Irã	2	28	N	\N	SELECAO
+863	NZL 18	18	Nova Zelândia	2	29	N	\N	SELECAO
+865	CPV 18	18	Cabo Verde	2	31	N	\N	SELECAO
+866	KSA 18	18	Arábia Saudita	2	32	N	\N	SELECAO
+867	URU 18	18	Uruguai	2	33	N	\N	SELECAO
+868	FRA 18	18	França	2	34	N	\N	SELECAO
+869	SEN 18	18	Senegal	2	35	N	\N	SELECAO
+870	IRQ 18	18	Iraque	2	36	N	\N	SELECAO
+871	NOR 18	18	Noruega	2	37	N	\N	SELECAO
+872	ARG 18	18	Argentina	2	38	N	\N	SELECAO
+873	ALG 18	18	Argélia	2	39	N	\N	SELECAO
+874	AUT 18	18	Áustria	2	40	N	\N	SELECAO
+875	JOR 18	18	Jordânia	2	41	N	\N	SELECAO
+876	POR 18	18	Portugal	2	42	N	\N	SELECAO
+877	COD 18	18	Congo	2	43	N	\N	SELECAO
+878	UZB 18	18	Uzbequistão	2	44	N	\N	SELECAO
+879	COL 18	18	Colômbia	2	45	N	\N	SELECAO
+880	ENG 18	18	Inglaterra	2	46	N	\N	SELECAO
+881	CRO 18	18	Croácia	2	47	N	\N	SELECAO
+882	GHA 18	18	Gana	2	48	N	\N	SELECAO
+883	PAN 18	18	Panamá	2	49	N	\N	SELECAO
+884	MEX 19	19	México	2	2	N	\N	SELECAO
+885	RSA 19	19	África do Sul	2	3	N	\N	SELECAO
+886	KOR 19	19	Coréia do Sul	2	4	N	\N	SELECAO
+887	CZE 19	19	Rep. Tcheca	2	5	N	\N	SELECAO
+888	CAN 19	19	Canadá	2	6	N	\N	SELECAO
+889	BIH 19	19	Bósnia	2	7	N	\N	SELECAO
+890	QAT 19	19	Catar	2	8	N	\N	SELECAO
+891	SUI 19	19	Suiça	2	9	N	\N	SELECAO
+892	BRA 19	19	Brasil	2	10	N	\N	SELECAO
+893	MAR 19	19	Marrocos	2	11	N	\N	SELECAO
+894	HAI 19	19	Haiti	2	12	N	\N	SELECAO
+895	SCO 19	19	Escócia	2	13	N	\N	SELECAO
+896	USA 19	19	Estados Unidos	2	14	N	\N	SELECAO
+897	PAR 19	19	Paraguai	2	15	N	\N	SELECAO
+898	AUS 19	19	Austrália	2	16	N	\N	SELECAO
+899	TUR 19	19	Turquia	2	17	N	\N	SELECAO
+900	GER 19	19	Alemanha	2	18	N	\N	SELECAO
+901	CUW 19	19	Curaçao	2	19	N	\N	SELECAO
+902	CIV 19	19	Costa do Marfim	2	20	N	\N	SELECAO
+903	ECU 19	19	Equador	2	21	N	\N	SELECAO
+904	HOL 19	19	Holanda	2	22	N	\N	SELECAO
+905	JPN 19	19	Japão	2	23	N	\N	SELECAO
+906	SWE 19	19	Suécia	2	24	N	\N	SELECAO
+907	TUN 19	19	Tunísia	2	25	N	\N	SELECAO
+908	BEL 19	19	Bélgica	2	26	N	\N	SELECAO
+909	EGY 19	19	Egito	2	27	N	\N	SELECAO
+910	IRN 19	19	Irã	2	28	N	\N	SELECAO
+911	NZL 19	19	Nova Zelândia	2	29	N	\N	SELECAO
+913	CPV 19	19	Cabo Verde	2	31	N	\N	SELECAO
+914	KSA 19	19	Arábia Saudita	2	32	N	\N	SELECAO
+915	URU 19	19	Uruguai	2	33	N	\N	SELECAO
+916	FRA 19	19	França	2	34	N	\N	SELECAO
+917	SEN 19	19	Senegal	2	35	N	\N	SELECAO
+918	IRQ 19	19	Iraque	2	36	N	\N	SELECAO
+919	NOR 19	19	Noruega	2	37	N	\N	SELECAO
+920	ARG 19	19	Argentina	2	38	N	\N	SELECAO
+921	ALG 19	19	Argélia	2	39	N	\N	SELECAO
+922	AUT 19	19	Áustria	2	40	N	\N	SELECAO
+923	JOR 19	19	Jordânia	2	41	N	\N	SELECAO
+924	POR 19	19	Portugal	2	42	N	\N	SELECAO
+925	COD 19	19	Congo	2	43	N	\N	SELECAO
+926	UZB 19	19	Uzbequistão	2	44	N	\N	SELECAO
+927	COL 19	19	Colômbia	2	45	N	\N	SELECAO
+928	ENG 19	19	Inglaterra	2	46	N	\N	SELECAO
+929	CRO 19	19	Croácia	2	47	N	\N	SELECAO
+930	GHA 19	19	Gana	2	48	N	\N	SELECAO
+931	PAN 19	19	Panamá	2	49	N	\N	SELECAO
+932	MEX 20	20	México	2	2	N	\N	SELECAO
+933	RSA 20	20	África do Sul	2	3	N	\N	SELECAO
+934	KOR 20	20	Coréia do Sul	2	4	N	\N	SELECAO
+935	CZE 20	20	Rep. Tcheca	2	5	N	\N	SELECAO
+936	CAN 20	20	Canadá	2	6	N	\N	SELECAO
+937	BIH 20	20	Bósnia	2	7	N	\N	SELECAO
+938	QAT 20	20	Catar	2	8	N	\N	SELECAO
+939	SUI 20	20	Suiça	2	9	N	\N	SELECAO
+940	BRA 20	20	Brasil	2	10	N	\N	SELECAO
+941	MAR 20	20	Marrocos	2	11	N	\N	SELECAO
+942	HAI 20	20	Haiti	2	12	N	\N	SELECAO
+943	SCO 20	20	Escócia	2	13	N	\N	SELECAO
+944	USA 20	20	Estados Unidos	2	14	N	\N	SELECAO
+945	PAR 20	20	Paraguai	2	15	N	\N	SELECAO
+946	AUS 20	20	Austrália	2	16	N	\N	SELECAO
+947	TUR 20	20	Turquia	2	17	N	\N	SELECAO
+948	GER 20	20	Alemanha	2	18	N	\N	SELECAO
+949	CUW 20	20	Curaçao	2	19	N	\N	SELECAO
+950	CIV 20	20	Costa do Marfim	2	20	N	\N	SELECAO
+951	ECU 20	20	Equador	2	21	N	\N	SELECAO
+952	HOL 20	20	Holanda	2	22	N	\N	SELECAO
+953	JPN 20	20	Japão	2	23	N	\N	SELECAO
+954	SWE 20	20	Suécia	2	24	N	\N	SELECAO
+955	TUN 20	20	Tunísia	2	25	N	\N	SELECAO
+956	BEL 20	20	Bélgica	2	26	N	\N	SELECAO
+957	EGY 20	20	Egito	2	27	N	\N	SELECAO
+958	IRN 20	20	Irã	2	28	N	\N	SELECAO
+959	NZL 20	20	Nova Zelândia	2	29	N	\N	SELECAO
+961	CPV 20	20	Cabo Verde	2	31	N	\N	SELECAO
+962	KSA 20	20	Arábia Saudita	2	32	N	\N	SELECAO
+963	URU 20	20	Uruguai	2	33	N	\N	SELECAO
+964	FRA 20	20	França	2	34	N	\N	SELECAO
+965	SEN 20	20	Senegal	2	35	N	\N	SELECAO
+966	IRQ 20	20	Iraque	2	36	N	\N	SELECAO
+967	NOR 20	20	Noruega	2	37	N	\N	SELECAO
+968	ARG 20	20	Argentina	2	38	N	\N	SELECAO
+969	ALG 20	20	Argélia	2	39	N	\N	SELECAO
+970	AUT 20	20	Áustria	2	40	N	\N	SELECAO
+971	JOR 20	20	Jordânia	2	41	N	\N	SELECAO
+972	POR 20	20	Portugal	2	42	N	\N	SELECAO
+973	COD 20	20	Congo	2	43	N	\N	SELECAO
+974	UZB 20	20	Uzbequistão	2	44	N	\N	SELECAO
+975	COL 20	20	Colômbia	2	45	N	\N	SELECAO
+976	ENG 20	20	Inglaterra	2	46	N	\N	SELECAO
+977	CRO 20	20	Croácia	2	47	N	\N	SELECAO
+978	GHA 20	20	Gana	2	48	N	\N	SELECAO
+979	PAN 20	20	Panamá	2	49	N	\N	SELECAO
+994	00	0	Figurinha Especial	4	52	N	\N	ESPECIAL
+\.
+
+
+--
+-- Data for Name: selecao; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.selecao (id, nome, sigla, grupo_copa, ativa) FROM stdin;
+1	FIFA WORLD CUP 2026	FWC	\N	S
+2	México	MEX	A	S
+3	África do Sul	RSA	A	S
+4	Coréia do Sul	KOR	A	S
+5	Rep. Tcheca	CZE	A	S
+6	Canadá	CAN	B	S
+7	Bósnia	BIH	B	S
+8	Catar	QAT	B	S
+9	Suiça	SUI	B	S
+10	Brasil	BRA	C	S
+11	Marrocos	MAR	C	S
+12	Haiti	HAI	C	S
+13	Escócia	SCO	C	S
+14	Estados Unidos	USA	D	S
+15	Paraguai	PAR	D	S
+16	Austrália	AUS	D	S
+17	Turquia	TUR	D	S
+18	Alemanha	GER	E	S
+19	Curaçao	CUW	E	S
+20	Costa do Marfim	CIV	E	S
+21	Equador	ECU	E	S
+22	Holanda	HOL	F	S
+23	Japão	JPN	F	S
+24	Suécia	SWE	F	S
+25	Tunísia	TUN	F	S
+26	Bélgica	BEL	G	S
+27	Egito	EGY	G	S
+28	Irã	IRN	G	S
+29	Nova Zelândia	NZL	G	S
+30	Espanha	ESP	H	S
+31	Cabo Verde	CPV	H	S
+32	Arábia Saudita	KSA	H	S
+33	Uruguai	URU	H	S
+34	França	FRA	I	S
+35	Senegal	SEN	I	S
+36	Iraque	IRQ	I	S
+37	Noruega	NOR	I	S
+38	Argentina	ARG	J	S
+39	Argélia	ALG	J	S
+40	Áustria	AUT	J	S
+41	Jordânia	JOR	J	S
+42	Portugal	POR	K	S
+43	Congo	COD	K	S
+44	Uzbequistão	UZB	K	S
+45	Colômbia	COL	K	S
+46	Inglaterra	ENG	L	S
+47	Croácia	CRO	L	S
+48	Gana	GHA	L	S
+49	Panamá	PAN	L	S
+50	Coca-Cola	CC	\N	S
+52	Especiais	SPC	\N	S
+\.
+
+
+--
+-- Name: album_figurinha_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.album_figurinha_id_seq', 1988, true);
+
+
+--
+-- Name: album_novo_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.album_novo_id_seq', 2, true);
+
+
+--
+-- Name: categoria_figurinha_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.categoria_figurinha_id_seq', 4, true);
+
+
+--
+-- Name: figurinha_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.figurinha_id_seq', 994, true);
+
+
+--
+-- Name: selecao_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.selecao_id_seq', 52, true);
+
+
+--
+-- Name: album_figurinha album_figurinha_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.album_figurinha
+    ADD CONSTRAINT album_figurinha_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: album_novo album_novo_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.album_novo
+    ADD CONSTRAINT album_novo_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: album album_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.album
+    ADD CONSTRAINT album_pkey PRIMARY KEY (figurinha_id);
+
+
+--
+-- Name: categoria_figurinha categoria_figurinha_nome_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.categoria_figurinha
+    ADD CONSTRAINT categoria_figurinha_nome_key UNIQUE (nome);
+
+
+--
+-- Name: categoria_figurinha categoria_figurinha_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.categoria_figurinha
+    ADD CONSTRAINT categoria_figurinha_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: figurinha figurinha_codigo_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.figurinha
+    ADD CONSTRAINT figurinha_codigo_key UNIQUE (codigo);
+
+
+--
+-- Name: figurinha figurinha_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.figurinha
+    ADD CONSTRAINT figurinha_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: selecao selecao_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.selecao
+    ADD CONSTRAINT selecao_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: selecao selecao_sigla_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.selecao
+    ADD CONSTRAINT selecao_sigla_key UNIQUE (sigla);
+
+
+--
+-- Name: idx_figurinha_categoria; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX idx_figurinha_categoria ON public.figurinha USING btree (categoria_id);
+
+
+--
+-- Name: idx_figurinha_selecao; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX idx_figurinha_selecao ON public.figurinha USING btree (selecao_id);
+
+
+--
+-- Name: idx_selecao_grupo; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX idx_selecao_grupo ON public.selecao USING btree (grupo_copa);
+
+
+--
+-- Name: album_figurinha fk_af_album; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.album_figurinha
+    ADD CONSTRAINT fk_af_album FOREIGN KEY (album_id) REFERENCES public.album_novo(id);
+
+
+--
+-- Name: album_figurinha fk_af_figurinha; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.album_figurinha
+    ADD CONSTRAINT fk_af_figurinha FOREIGN KEY (figurinha_id) REFERENCES public.figurinha(id);
+
+
+--
+-- Name: album fk_album_figurinha; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.album
+    ADD CONSTRAINT fk_album_figurinha FOREIGN KEY (figurinha_id) REFERENCES public.figurinha(id);
+
+
+--
+-- Name: figurinha fk_figurinha_categoria; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.figurinha
+    ADD CONSTRAINT fk_figurinha_categoria FOREIGN KEY (categoria_id) REFERENCES public.categoria_figurinha(id);
+
+
+--
+-- Name: figurinha fk_figurinha_selecao; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.figurinha
+    ADD CONSTRAINT fk_figurinha_selecao FOREIGN KEY (selecao_id) REFERENCES public.selecao(id);
+
+
+--
+-- PostgreSQL database dump complete
+--
+
+\unrestrict PfPbEiiPt2s4rnwknrXcw9c5lw10uUGT044RA2iZ5fJXjdepPhrtrIyAE4A53Wd
+

@@ -7,6 +7,7 @@ import br.com.copa2026.frontend.dto.FigurinhaDTO;
 import br.com.copa2026.frontend.dto.SelecaoDTO;
 import br.com.copa2026.frontend.dto.SelecaoDashboardDTO;
 
+import br.com.copa2026.frontend.service.BackupService;
 import br.com.copa2026.frontend.service.DashboardService;
 
 import javafx.application.Application;
@@ -45,6 +46,9 @@ public class MainApp extends Application {
 
     private final DashboardService service =
             new DashboardService();
+
+    private final BackupService backupService =
+            new BackupService();
 
     private FlowPane gridFigurinhas;
 
@@ -309,6 +313,42 @@ public class MainApp extends Application {
             exportarFaltantes();
         });
 
+        Button btnBackup =
+                new Button(
+                        "BACKUP"
+                );
+
+        btnBackup.setStyle(
+                "-fx-background-color: #455A64;"
+                        + "-fx-text-fill: white;"
+                        + "-fx-font-weight: bold;"
+                        + "-fx-font-size: 14px;"
+        );
+
+        btnBackup.setOnAction(event -> {
+
+            backupService.realizarBackup();
+
+            Alert alert =
+                    new Alert(
+                            Alert.AlertType.INFORMATION
+                    );
+
+            alert.setTitle(
+                    "Backup"
+            );
+
+            alert.setHeaderText(
+                    "Backup realizado"
+            );
+
+            alert.setContentText(
+                    "Arquivo backup-copa2026.sql criado."
+            );
+
+            alert.showAndWait();
+        });
+
         VBox cardTotal =
                 criarCard(
                         "TOTAL",
@@ -416,6 +456,7 @@ public class MainApp extends Application {
                 acoesAlbum,
                 cards,
                 btnExportar,
+                btnBackup,
                 painelSelecao,
                 gridFigurinhas
         );
