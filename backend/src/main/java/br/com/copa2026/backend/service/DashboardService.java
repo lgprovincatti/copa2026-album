@@ -1,6 +1,7 @@
 package br.com.copa2026.backend.service;
 
 import br.com.copa2026.backend.dto.DashboardDTO;
+import br.com.copa2026.backend.dto.DashboardGrupoDTO;
 import br.com.copa2026.backend.dto.FaltantesDTO;
 import br.com.copa2026.backend.dto.FigurinhaDTO;
 import br.com.copa2026.backend.dto.SelecaoDashboardDTO;
@@ -62,6 +63,85 @@ public class DashboardService {
                 faltam,
                 percentual
         );
+    }
+
+    public List<DashboardGrupoDTO> obterGrupos(
+            Long albumId
+    ) {
+
+        List<AlbumFigurinha> lista =
+                repository.findAll()
+                        .stream()
+                        .filter(a ->
+                                a.getAlbum()
+                                        .getId()
+                                        .equals(albumId)
+                        )
+                        .toList();
+
+        Map<String, List<AlbumFigurinha>> agrupado =
+
+                lista.stream()
+
+                        .collect(
+                                Collectors.groupingBy(
+                                        a ->
+                                                a.getFigurinha()
+                                                        .getTipo()
+                                )
+                        );
+
+        return agrupado.entrySet()
+                .stream()
+                .map(entry -> {
+
+                    List<AlbumFigurinha> grupo =
+                            entry.getValue();
+
+                    Long total =
+                            (long) grupo.size();
+
+                    Long possui =
+                            grupo.stream()
+                                    .filter(a ->
+                                            "S".equals(
+                                                    a.getPossui()
+                                            )
+                                    )
+                                    .count();
+
+                    Long faltam =
+                            total - possui;
+
+                    Double percentual = 0.0;
+
+                    if (total > 0) {
+
+                        percentual =
+                                (possui.doubleValue()
+                                        / total.doubleValue())
+                                        * 100.0;
+                    }
+
+                    DashboardGrupoDTO dto =
+                            new DashboardGrupoDTO();
+
+                    dto.setTipo(
+                            entry.getKey()
+                    );
+
+                    dto.setTotal(total);
+
+                    dto.setPossui(possui);
+
+                    dto.setFaltam(faltam);
+
+                    dto.setPercentual(percentual);
+
+                    return dto;
+
+                })
+                .toList();
     }
 
     public void marcarComoPossui(

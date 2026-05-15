@@ -3,6 +3,7 @@ package br.com.copa2026.frontend.service;
 import br.com.copa2026.frontend.dto.AlbumDTO;
 import br.com.copa2026.frontend.dto.CreateAlbumDTO;
 import br.com.copa2026.frontend.dto.DashboardDTO;
+import br.com.copa2026.frontend.dto.DashboardGrupoDTO;
 import br.com.copa2026.frontend.dto.FaltantesDTO;
 import br.com.copa2026.frontend.dto.SelecaoDTO;
 import br.com.copa2026.frontend.dto.SelecaoDashboardDTO;
@@ -57,6 +58,42 @@ public class DashboardService {
             e.printStackTrace();
 
             return null;
+        }
+    }
+
+    public List<DashboardGrupoDTO> carregarGrupos(
+            Long albumId
+    ) {
+
+        try {
+
+            URI uri = URI.create(
+                    "http://localhost:8080/dashboard/grupos?albumId="
+                            + albumId
+            );
+
+            URL url = uri.toURL();
+
+            HttpURLConnection conexao =
+                    (HttpURLConnection)
+                            url.openConnection();
+
+            conexao.setRequestMethod("GET");
+
+            InputStream input =
+                    conexao.getInputStream();
+
+            return mapper.readValue(
+                    input,
+                    new TypeReference<>() {
+                    }
+            );
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+
+            return List.of();
         }
     }
 
